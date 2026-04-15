@@ -6,8 +6,8 @@
   --panel-strong: #18223d;
   --cell: #101828;
   --cell-hover: #17223b;
-  --border: rgba(148, 163, 184, 0.18);
-  --border-strong: rgba(148, 163, 184, 0.3);
+  --border: rgba(148, 163, 184, 0.28);
+  --border-strong: rgba(148, 163, 184, 0.42);
   --text: #e5e7eb;
   --muted: #93a0b8;
   --accent: #7dd3fc;
@@ -51,6 +51,14 @@ body {
   animation: panel-enter 480ms cubic-bezier(0.2, 0.8, 0.2, 1);
 }
 
+.game.is-intro {
+  border-color: transparent;
+  box-shadow: 0 24px 80px rgba(0, 0, 0, 0.45), inset 0 0 0 0 rgba(148, 163, 184, 0);
+  animation:
+    panel-enter 480ms cubic-bezier(0.2, 0.8, 0.2, 1),
+    trace-shell-border 880ms cubic-bezier(0.22, 1, 0.36, 1) forwards;
+}
+
 .eyebrow {
   margin-bottom: 14px;
   color: var(--accent);
@@ -85,7 +93,41 @@ h1 {
 .status-panel,
 .scoreboard,
 .board {
-  border: 1px solid var(--border);
+  border: 1px solid var(--border-strong);
+  box-shadow: inset 0 0 0 1px rgba(148, 163, 184, 0.08);
+}
+
+.game.is-intro .status-panel,
+.game.is-intro .scoreboard,
+.game.is-intro .board,
+.game.is-intro .insight-card {
+  border-color: transparent;
+  box-shadow: inset 0 0 0 0 rgba(148, 163, 184, 0);
+  animation: trace-panel-border 760ms cubic-bezier(0.22, 1, 0.36, 1) forwards;
+}
+
+.game.is-intro .status-panel {
+  animation-delay: 180ms;
+}
+
+.game.is-intro .scoreboard {
+  animation-delay: 320ms;
+}
+
+.game.is-intro .insight-card:nth-child(1) {
+  animation-delay: 430ms;
+}
+
+.game.is-intro .insight-card:nth-child(2) {
+  animation-delay: 500ms;
+}
+
+.game.is-intro .insight-card:nth-child(3) {
+  animation-delay: 570ms;
+}
+
+.game.is-intro .board {
+  animation-delay: 640ms;
 }
 
 .status-panel {
@@ -149,10 +191,11 @@ h1 {
   align-items: center;
   column-gap: 14px;
   padding: 14px 16px;
-  border: 1px solid transparent;
+  border: 1px solid var(--border-strong);
   border-radius: 16px;
   background: rgba(255, 255, 255, 0.025);
   color: var(--muted);
+  box-shadow: inset 0 0 0 1px rgba(148, 163, 184, 0.08);
   transition: border-color 160ms ease, background 160ms ease, color 160ms ease, transform 160ms ease;
 }
 
@@ -191,9 +234,10 @@ h1 {
 
 .insight-card {
   padding: 14px 16px;
-  border: 1px solid var(--border);
+  border: 1px solid var(--border-strong);
   border-radius: 18px;
   background: rgba(255, 255, 255, 0.02);
+  box-shadow: inset 0 0 0 1px rgba(148, 163, 184, 0.08);
   animation: float-idle 6s ease-in-out infinite;
 }
 
@@ -232,44 +276,9 @@ h1 {
   overflow: hidden;
 }
 
-.board::before,
-.board::after {
-  content: "";
-  position: absolute;
-  inset: 12px;
-  pointer-events: none;
-  opacity: 0;
-}
-
-.board::before {
-  background:
-    linear-gradient(to right, transparent 32.5%, rgba(125, 211, 252, 0.55) 32.5%, rgba(125, 211, 252, 0.55) 34.5%, transparent 34.5%),
-    linear-gradient(to right, transparent 65.5%, rgba(125, 211, 252, 0.55) 65.5%, rgba(125, 211, 252, 0.55) 67.5%, transparent 67.5%);
-  transform: scaleY(0);
-  transform-origin: top;
-}
-
-.board::after {
-  background:
-    linear-gradient(to bottom, transparent 32.5%, rgba(125, 211, 252, 0.55) 32.5%, rgba(125, 211, 252, 0.55) 34.5%, transparent 34.5%),
-    linear-gradient(to bottom, transparent 65.5%, rgba(125, 211, 252, 0.55) 65.5%, rgba(125, 211, 252, 0.55) 67.5%, transparent 67.5%);
-  transform: scaleX(0);
-  transform-origin: left;
-}
-
-.board.is-intro::before {
-  opacity: 1;
-  animation: draw-grid-vertical 420ms cubic-bezier(0.25, 1, 0.3, 1) forwards;
-}
-
-.board.is-intro::after {
-  opacity: 1;
-  animation: draw-grid-horizontal 420ms cubic-bezier(0.25, 1, 0.3, 1) 150ms forwards;
-}
-
 .cell {
   aspect-ratio: 1;
-  border: 1px solid var(--border);
+  border: 1px solid var(--border-strong);
   border-radius: 18px;
   background:
     linear-gradient(180deg, rgba(255, 255, 255, 0.03), transparent 55%),
@@ -280,24 +289,25 @@ h1 {
   font-weight: 800;
   letter-spacing: -0.04em;
   cursor: pointer;
+  box-shadow: inset 0 0 0 1px rgba(148, 163, 184, 0.08);
   transition: transform 160ms ease, border-color 160ms ease, background 160ms ease, box-shadow 160ms ease;
 }
 
 .board.is-intro .cell {
-  opacity: 0;
-  transform: scale(0.96);
-  animation: reveal-cell 240ms ease-out forwards;
+  border-color: transparent;
+  box-shadow: inset 0 0 0 0 rgba(148, 163, 184, 0);
+  animation: trace-cell-border 620ms cubic-bezier(0.22, 1, 0.36, 1) forwards;
 }
 
-.board.is-intro .cell:nth-child(1) { animation-delay: 120ms; }
-.board.is-intro .cell:nth-child(2) { animation-delay: 170ms; }
-.board.is-intro .cell:nth-child(3) { animation-delay: 220ms; }
-.board.is-intro .cell:nth-child(4) { animation-delay: 270ms; }
-.board.is-intro .cell:nth-child(5) { animation-delay: 320ms; }
-.board.is-intro .cell:nth-child(6) { animation-delay: 370ms; }
-.board.is-intro .cell:nth-child(7) { animation-delay: 420ms; }
-.board.is-intro .cell:nth-child(8) { animation-delay: 470ms; }
-.board.is-intro .cell:nth-child(9) { animation-delay: 520ms; }
+.board.is-intro .cell:nth-child(1) { animation-delay: 690ms; }
+.board.is-intro .cell:nth-child(2) { animation-delay: 770ms; }
+.board.is-intro .cell:nth-child(3) { animation-delay: 850ms; }
+.board.is-intro .cell:nth-child(4) { animation-delay: 790ms; }
+.board.is-intro .cell:nth-child(5) { animation-delay: 870ms; }
+.board.is-intro .cell:nth-child(6) { animation-delay: 950ms; }
+.board.is-intro .cell:nth-child(7) { animation-delay: 890ms; }
+.board.is-intro .cell:nth-child(8) { animation-delay: 970ms; }
+.board.is-intro .cell:nth-child(9) { animation-delay: 1050ms; }
 
 .cell:hover:not(:disabled) {
   transform: translateY(-2px);
@@ -321,11 +331,61 @@ h1 {
 }
 
 .mark {
-  display: inline-block;
+  display: block;
+  width: 68%;
+  height: 68%;
+  margin: auto;
 }
 
 .mark.is-drawing {
-  animation: draw-mark 260ms cubic-bezier(0.2, 0.9, 0.2, 1) both;
+  animation: mark-fade-in 200ms ease-out both;
+}
+
+.mark svg {
+  display: block;
+  width: 100%;
+  height: 100%;
+  overflow: visible;
+}
+
+.mark.is-static line,
+.mark.is-static circle {
+  stroke-dashoffset: 0;
+}
+
+.mark path,
+.mark circle,
+.mark line {
+  fill: none;
+  stroke-width: 9;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+.mark-x line {
+  stroke: var(--accent);
+  stroke-dasharray: 100;
+  stroke-dashoffset: 100;
+}
+
+.mark-o circle {
+  stroke: var(--accent-warm);
+  stroke-dasharray: 100;
+  stroke-dashoffset: 100;
+  transform: rotate(-90deg);
+  transform-origin: 50% 50%;
+}
+
+.mark.is-drawing.mark-x line {
+  animation: draw-x-stroke 0.92s linear forwards;
+}
+
+.mark.is-drawing.mark-o circle {
+  animation: draw-o-stroke 1.04s linear forwards;
+}
+
+.mark-x line:last-child {
+  animation-delay: 80ms;
 }
 
 .cell.last-move {
@@ -381,39 +441,39 @@ h1 {
   }
 }
 
-@keyframes draw-grid-vertical {
+@keyframes trace-cell-border {
   from {
-    transform: scaleY(0);
-    opacity: 0;
+    border-color: transparent;
+    box-shadow: inset 0 0 0 0 rgba(148, 163, 184, 0);
   }
 
   to {
-    transform: scaleY(1);
-    opacity: 1;
+    border-color: var(--border-strong);
+    box-shadow: inset 0 0 0 1px rgba(148, 163, 184, 0.08);
   }
 }
 
-@keyframes draw-grid-horizontal {
+@keyframes trace-shell-border {
   from {
-    transform: scaleX(0);
-    opacity: 0;
+    border-color: transparent;
+    box-shadow: 0 24px 80px rgba(0, 0, 0, 0.45), inset 0 0 0 0 rgba(148, 163, 184, 0);
   }
 
   to {
-    transform: scaleX(1);
-    opacity: 1;
+    border-color: var(--border);
+    box-shadow: 0 24px 80px rgba(0, 0, 0, 0.45), inset 0 0 0 1px rgba(148, 163, 184, 0.08);
   }
 }
 
-@keyframes reveal-cell {
+@keyframes trace-panel-border {
   from {
-    opacity: 0;
-    transform: scale(0.96);
+    border-color: transparent;
+    box-shadow: inset 0 0 0 0 rgba(148, 163, 184, 0);
   }
 
   to {
-    opacity: 1;
-    transform: scale(1);
+    border-color: var(--border-strong);
+    box-shadow: inset 0 0 0 1px rgba(148, 163, 184, 0.08);
   }
 }
 
@@ -428,23 +488,37 @@ h1 {
   }
 }
 
-@keyframes draw-mark {
+@keyframes mark-fade-in {
   0% {
     opacity: 0;
-    transform: scale(0.72);
-    filter: blur(3px);
-  }
-
-  65% {
-    opacity: 1;
-    transform: scale(1.06);
-    filter: blur(0);
+    transform: scale(0.92);
+    filter: blur(2px);
   }
 
   100% {
     opacity: 1;
     transform: scale(1);
     filter: blur(0);
+  }
+}
+
+@keyframes draw-o-stroke {
+  from {
+    stroke-dashoffset: 100;
+  }
+
+  100% {
+    stroke-dashoffset: 0;
+  }
+}
+
+@keyframes draw-x-stroke {
+  from {
+    stroke-dashoffset: 100;
+  }
+
+  to {
+    stroke-dashoffset: 0;
   }
 }
 

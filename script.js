@@ -1,3 +1,4 @@
+const gameElement = document.querySelector(".game");
 const boardElement = document.getElementById("board");
 const statusElement = document.getElementById("status");
 const resetButton = document.getElementById("reset");
@@ -36,6 +37,8 @@ let streak = {
   player: "",
   count: 0
 };
+let introAnimationTimer = null;
+const INTRO_MAX_DELAY = 900;
 
 function createBoard() {
   boardElement.innerHTML = "";
@@ -87,15 +90,37 @@ function applyCellState(button, value, index, shouldAnimateMark) {
     return;
   }
 
-  const mark = document.createElement("span");
-  mark.className = "mark";
-  mark.textContent = value;
+  const mark = createMark(value);
 
   if (shouldAnimateMark) {
     mark.classList.add("is-drawing");
+  } else {
+    mark.classList.add("is-static");
   }
 
   button.appendChild(mark);
+}
+
+function createMark(value) {
+  const mark = document.createElement("span");
+  mark.className = `mark mark-${value.toLowerCase()}`;
+
+  if (value === "X") {
+    mark.innerHTML = [
+      '<svg viewBox="0 0 100 100" aria-hidden="true" focusable="false">',
+      '<line x1="24" y1="22" x2="76" y2="78" pathLength="100"></line>',
+      '<line x1="76" y1="22" x2="24" y2="78" pathLength="100"></line>',
+      "</svg>"
+    ].join("");
+    return mark;
+  }
+
+  mark.innerHTML = [
+    '<svg viewBox="0 0 100 100" aria-hidden="true" focusable="false">',
+    '<circle cx="50" cy="50" r="32" pathLength="100"></circle>',
+    "</svg>"
+  ].join("");
+  return mark;
 }
 
 function handleMove(event) {
@@ -194,11 +219,55 @@ function resetGame() {
   roundNumber += 1;
   statusElement.textContent = "Player X's turn";
   updateBoard();
+  triggerIntroAnimation();
+}
+
+function triggerIntroAnimation() {
+  if (introAnimationTimer) {
+    window.clearTimeout(introAnimationTimer);
+    introAnimationTimer = null;
+  }
+
+  applyIntroDelays();
+
+  gameElement.classList.remove("is-intro");
+  boardElement.classList.remove("is-intro");
+
+  void gameElement.offsetWidth;
+  void boardElement.offsetWidth;
+
+  gameElement.classList.add("is-intro");
+  boardElement.classList.add("is-intro");
+
+  introAnimationTimer = window.setTimeout(() => {
+    gameElement.classList.remove("is-intro");
+    boardElement.classList.remove("is-intro");
+    introAnimationTimer = null;
+  }, 1900);
+}
+
+function applyIntroDelays() {
+  const animatedElements = [
+    ...gameElement.querySelectorAll(".status-panel, .scoreboard, .insight-card, .board, .cell")
+  ];
+
+  const viewportWidth = Math.max(window.innerWidth, 1);
+  const viewportHeight = Math.max(window.innerHeight, 1);
+
+  animatedElements.forEach((element) => {
+    const rect = element.getBoundingClientRect();
+    const centerX = rect.left + rect.width / 2;
+    const centerY = rect.top + rect.height / 2;
+    const normalizedX = centerX / viewportWidth;
+    const normalizedY = centerY / viewportHeight;
+    const diagonalProgress = (normalizedX + normalizedY) / 2;
+    const delay = Math.round(diagonalProgress * INTRO_MAX_DELAY);
+
+    element.style.setProperty("--intro-delay", `${delay}ms`);
+  });
 }
 
 resetButton.addEventListener("click", resetGame);
+window.addEventListener("resize", applyIntroDelays);
 createBoard();
-boardElement.classList.add("is-intro");
-window.setTimeout(() => {
-  boardElement.classList.remove("is-intro");
-}, 900);
+triggerIntroAnimation();
