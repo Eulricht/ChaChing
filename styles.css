@@ -372,16 +372,16 @@ h1 {
   stroke: var(--accent-warm);
   stroke-dasharray: 100;
   stroke-dashoffset: 100;
-  transform: rotate(-90deg);
+  transform: rotate(-90deg) scaleX(-1);
   transform-origin: 50% 50%;
 }
 
 .mark.is-drawing.mark-x line {
-  animation: draw-x-stroke 0.16s linear forwards;
+  animation: draw-x-stroke 0.14s linear forwards;
 }
 
 .mark.is-drawing.mark-o circle {
-  animation: draw-o-stroke 0.2s linear forwards;
+  animation: draw-o-stroke 0.18s linear forwards;
 }
 
 .mark-x line:last-child {
