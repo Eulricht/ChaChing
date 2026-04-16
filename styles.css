@@ -371,8 +371,8 @@ h1 {
 .mark-o circle {
   stroke: var(--accent-warm);
   stroke-dasharray: 100;
-  stroke-dashoffset: 100;
-  transform: rotate(-90deg) scaleX(-1);
+  stroke-dashoffset: -100;
+  transform: rotate(-90deg);
   transform-origin: 50% 50%;
 }
 
@@ -504,7 +504,7 @@ h1 {
 
 @keyframes draw-o-stroke {
   from {
-    stroke-dashoffset: 100;
+    stroke-dashoffset: -100;
   }
 
   100% {
