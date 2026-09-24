@@ -1,0 +1,36 @@
+:root {
+  color-scheme: dark;
+  --hub-bg: #0c0c0f;
+  --hub-surface: #131316;
+  --hub-hover: #1b191f;
+  --hub-text: #dedbe3;
+  --hub-muted: #99939f;
+  --hub-accent: #a18ab8;
+  --hub-line: #29262e;
+  --bg: var(--hub-bg);
+  --panel: var(--hub-surface);
+  --cell: var(--hub-surface);
+  --cell-hover: var(--hub-hover);
+  --border: var(--hub-line);
+  --border-strong: #38323f;
+  --text: var(--hub-text);
+  --muted: var(--hub-muted);
+  --accent: var(--hub-accent);
+  --accent-strong: #b49acc;
+  --accent-warm: #c3bdcc;
+}
+*, *::before, *::after { box-sizing: border-box; }
+body.dashboard-page, body.project-page { background: var(--hub-bg); color: var(--hub-text); }
+.project-card, .upcoming-project { background: var(--hub-surface); }
+a.project-card:hover { background: var(--hub-hover); border-color: var(--hub-accent); }
+.project-symbol span { color: var(--hub-muted); }
+.project-page .game { --accent: var(--hub-accent); --accent-strong: #b49acc; background: var(--hub-surface); backdrop-filter: none; }
+.project-page .cell { background: var(--cell); }
+.project-page .cell:hover:not(:disabled) { background: var(--cell-hover); border-color: var(--accent); }
+.project-page .meta-pill, .project-page .score-card.is-active { background: #211c28; border-color: #51445f; }
+.project-page .reset { background: #211c28; border-color: #51445f; }
+.project-page .reset:hover { background: #2b2433; border-color: var(--accent); }
+.project-page .cell.last-move { box-shadow: inset 0 0 0 1px #51445f; animation: none; }
+.project-page .cell.win { background: #27202f; border-color: var(--accent); box-shadow: inset 0 0 0 1px #51445f; }
+button, a { -webkit-tap-highlight-color: transparent; }
+:focus-visible { outline: 2px solid var(--hub-accent); outline-offset: 4px; }

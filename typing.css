@@ -1,0 +1,28 @@
+.typing-main { width: min(100% - 48px, 900px); margin: 64px auto; }
+.typing-heading { margin-bottom: 44px; }
+.typing-heading h1 { font-size: 36px; font-weight: 500; letter-spacing: -.04em; margin: 12px 0; }
+.typing-heading > p:last-child { color: var(--hub-muted); font-size: 14px; }
+.typing-toolbar, .typing-footer { display: flex; align-items: center; justify-content: space-between; gap: 16px; }
+.typing-toolbar { border-bottom: 1px solid var(--hub-line); padding-bottom: 16px; color: var(--hub-muted); font: 12px Consolas, monospace; }
+.typing-main button { background: transparent; color: var(--hub-muted); border: 1px solid transparent; border-radius: 6px; padding: 10px 12px; font: inherit; cursor: pointer; min-height: 44px; }
+.typing-main button:hover, .typing-main button[aria-pressed="true"] { color: var(--hub-accent); background: var(--hub-hover); }
+.typing-stats { display: flex; flex-wrap: wrap; gap: 28px; margin: 28px 0; color: var(--hub-muted); font: 13px Consolas, monospace; }
+.typing-stats strong { color: var(--hub-accent); font-size: 24px; font-weight: 400; }
+.word-window { height: 148px; overflow: hidden; margin-bottom: 28px; }
+#words { font: 24px/1.95 Consolas, "Courier New", monospace; color: #77727e; overflow-wrap: anywhere; }
+.typing-word { display: inline-block; white-space: pre; }
+#words .correct { color: var(--hub-text); }
+#words .incorrect { color: #d68b99; background: #311c23; border-radius: 2px; }
+#words .caret { border-left: 2px solid var(--hub-accent); margin-left: -2px; }
+.input-label { display: block; color: var(--hub-muted); font-size: 12px; margin-bottom: 10px; }
+#typing-input { box-sizing: border-box; width: 100%; border: 1px solid var(--hub-line); border-radius: 8px; padding: 14px 16px; color: var(--hub-text); background: var(--hub-surface); font: 16px Consolas, monospace; caret-color: var(--hub-accent); }
+#typing-input:focus { outline: none; border-color: var(--hub-accent); }
+.typing-footer { margin-top: 12px; font-size: 12px; color: var(--hub-muted); }
+.typing-note { font-size: 11px; color: var(--hub-muted); margin-top: 32px; }
+@media (max-width: 600px) {
+  .typing-main { width: calc(100% - 40px); margin-top: 36px; }
+  .typing-heading { margin-bottom: 28px; }
+  #words { font-size: 20px; }
+  .typing-stats { gap: 16px; }
+  .typing-footer { align-items: flex-start; }
+}
