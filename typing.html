@@ -4,15 +4,20 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Typing / Project Hub</title>
-  <link rel="stylesheet" href="dashboard.css?v=20260923-2">
-  <link rel="stylesheet" href="theme.css?v=20260924-1">
-  <link rel="stylesheet" href="typing.css?v=20260924-1">
-  <script src="typing.js?v=20260924-1" defer></script>
+  <link rel="stylesheet" href="dashboard.css?v=20260924-2">
+  <link rel="stylesheet" href="theme.css?v=20260924-2">
+  <link rel="stylesheet" href="typing.css?v=20260924-2">
+  <script src="typing.js?v=20260924-2" defer></script>
 </head>
 <body class="project-page">
   <nav class="site-nav" aria-label="Main navigation">
-    <a class="hub-link" href="index.html"><span aria-hidden="true">&larr;</span> Project Hub</a>
-    <span class="nav-location">Typing</span>
+    <a class="hub-link" href="index.html">
+      <svg class="home-icon" viewBox="0 0 24 24" aria-hidden="true">
+        <path d="M4 10.5 12 4l8 6.5v8a1.5 1.5 0 0 1-1.5 1.5h-13A1.5 1.5 0 0 1 4 18.5v-8Z"></path>
+        <path d="M9.5 20v-6h5v6"></path>
+      </svg>
+      Home
+    </a>
   </nav>
   <main class="typing-main">
     <header class="typing-heading"><p class="hub-eyebrow">Find your flow</p><h1>Just type.</h1><p>Small words. A clear mind. Your own pace.</p></header>
@@ -22,6 +27,7 @@
         <button type="button" data-seconds="15" aria-pressed="false">15s</button>
         <button type="button" data-seconds="30" aria-pressed="true">30s</button>
         <button type="button" data-seconds="60" aria-pressed="false">60s</button>
+        <button id="restart" type="button" aria-label="Restart typing test">Restart &crarr;</button>
       </div>
     </div>
     <div class="typing-stats" aria-label="Test statistics">
@@ -29,11 +35,15 @@
       <span><strong id="wpm">0</strong> wpm</span>
       <span><strong id="accuracy">100</strong>% accuracy</span>
     </div>
-    <div class="word-window" id="word-window"><div id="words" aria-label="Text to type"></div></div>
-    <label class="input-label" for="typing-input">Type the words above, including spaces</label>
-    <input id="typing-input" type="text" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" placeholder="Start typing here..." aria-describedby="typing-status">
-    <div class="typing-footer"><p id="typing-status" role="status">The timer starts with your first character.</p><button id="restart" type="button">Restart &crarr;</button></div>
-    <p class="typing-note">Backspace to correct a mistake. Speed uses correct characters / 5 per minute.</p>
+    <div class="typing-stage" id="typing-stage">
+      <div class="word-window" id="word-window">
+        <div id="words" aria-label="Text to type"></div>
+        <span class="typing-caret" id="typing-caret" aria-hidden="true"></span>
+      </div>
+      <div class="focus-reminder" id="focus-reminder" aria-hidden="true"><span>Click or tap to focus</span></div>
+    </div>
+    <input class="typing-capture" id="typing-input" type="text" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" aria-label="Typing test input" aria-describedby="typing-status">
+    <p class="sr-only" id="typing-status" role="status">Click the typing area to begin.</p>
   </main>
 </body>
 </html>

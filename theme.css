@@ -5,7 +5,7 @@
   --hub-hover: #1b191f;
   --hub-text: #dedbe3;
   --hub-muted: #99939f;
-  --hub-accent: #a18ab8;
+  --hub-accent: #b88cf0;
   --hub-line: #29262e;
   --bg: var(--hub-bg);
   --panel: var(--hub-surface);
@@ -16,7 +16,7 @@
   --text: var(--hub-text);
   --muted: var(--hub-muted);
   --accent: var(--hub-accent);
-  --accent-strong: #b49acc;
+  --accent-strong: #c39cff;
   --accent-warm: #c3bdcc;
 }
 *, *::before, *::after { box-sizing: border-box; }
@@ -24,7 +24,7 @@ body.dashboard-page, body.project-page { background: var(--hub-bg); color: var(-
 .project-card, .upcoming-project { background: var(--hub-surface); }
 a.project-card:hover { background: var(--hub-hover); border-color: var(--hub-accent); }
 .project-symbol span { color: var(--hub-muted); }
-.project-page .game { --accent: var(--hub-accent); --accent-strong: #b49acc; background: var(--hub-surface); backdrop-filter: none; }
+.project-page .game { --accent: var(--hub-accent); --accent-strong: #c39cff; background: var(--hub-surface); backdrop-filter: none; }
 .project-page .cell { background: var(--cell); }
 .project-page .cell:hover:not(:disabled) { background: var(--cell-hover); border-color: var(--accent); }
 .project-page .meta-pill, .project-page .score-card.is-active { background: #211c28; border-color: #51445f; }

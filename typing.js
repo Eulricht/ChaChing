@@ -2,6 +2,8 @@ const vocabulary = 'the of and to in you that it he was for on are as with his t
 const input = document.getElementById('typing-input');
 const wordsElement = document.getElementById('words');
 const viewport = document.getElementById('word-window');
+const stage = document.getElementById('typing-stage');
+const caretElement = document.getElementById('typing-caret');
 const status = document.getElementById('typing-status');
 let duration = 30;
 let target = '';
@@ -32,9 +34,24 @@ function finish() {
   finished = true;
   clearInterval(timer);
   input.disabled = true;
+  stage.classList.add('is-finished');
   const elapsed = Math.min(duration, (performance.now() - startedAt) / 1000);
   const result = updateStats(elapsed);
   status.textContent = `Test complete. ${result.wpm} WPM, ${result.accuracy}% accuracy. Restart to try again.`;
+}
+
+function moveCaret(instant = false) {
+  const targetCharacter = characters[Math.min(input.value.length, characters.length - 1)];
+  if (!targetCharacter) return;
+
+  const characterRect = targetCharacter.getBoundingClientRect();
+  const viewportRect = viewport.getBoundingClientRect();
+  const x = characterRect.left - viewportRect.left + viewport.scrollLeft;
+  const y = characterRect.top - viewportRect.top + viewport.scrollTop + (characterRect.height - caretElement.offsetHeight) / 2;
+
+  if (instant) caretElement.style.transition = 'none';
+  caretElement.style.transform = `translate3d(${x}px, ${y}px, 0)`;
+  if (instant) requestAnimationFrame(() => caretElement.style.removeProperty('transition'));
 }
 
 function tick() {
@@ -51,6 +68,7 @@ function reset(focus = false) {
   previous = '';
   input.value = '';
   input.disabled = false;
+  stage.classList.remove('is-finished');
   target = Array.from({ length: 250 }, () => vocabulary[Math.floor(Math.random() * vocabulary.length)]).join(' ');
   wordsElement.replaceChildren();
   characters = [];
@@ -65,11 +83,11 @@ function reset(focus = false) {
     }
     wordsElement.append(wrapper);
   });
-  characters[0].className = 'caret';
   input.maxLength = target.length;
   viewport.scrollTop = 0;
-  status.textContent = 'The timer starts with your first character.';
+  status.textContent = 'Click the typing area to begin.';
   updateStats();
+  requestAnimationFrame(() => moveCaret(true));
   if (focus) input.focus();
 }
 
@@ -100,14 +118,19 @@ input.addEventListener('input', () => {
   characters.forEach((span, i) => {
     span.className = i < input.value.length ? (input.value[i] === target[i] ? 'correct' : 'incorrect') : '';
   });
-  const caret = characters[input.value.length];
-  if (caret) {
-    caret.className = 'caret';
-    viewport.scrollTop += caret.getBoundingClientRect().top - viewport.getBoundingClientRect().top - 48;
+  const nextCharacter = characters[input.value.length];
+  if (nextCharacter) {
+    viewport.scrollTop += nextCharacter.getBoundingClientRect().top - viewport.getBoundingClientRect().top - 58;
+    requestAnimationFrame(() => moveCaret());
   }
   if (startedAt !== null) tick();
   if (input.value.length === target.length) finish();
 });
+stage.addEventListener('click', () => {
+  if (!finished) input.focus();
+});
+input.addEventListener('focus', () => stage.classList.add('is-focused'));
+input.addEventListener('blur', () => stage.classList.remove('is-focused'));
 document.getElementById('restart').addEventListener('click', () => reset(true));
 document.querySelectorAll('[data-seconds]').forEach(button => {
   button.addEventListener('click', () => {
@@ -116,5 +139,15 @@ document.querySelectorAll('[data-seconds]').forEach(button => {
     reset(true);
   });
 });
+document.addEventListener('keydown', event => {
+  if (document.activeElement === input || finished || event.ctrlKey || event.metaKey || event.altKey) return;
+  if (event.key.length !== 1 && event.key !== 'Backspace') return;
+
+  event.preventDefault();
+  input.focus();
+  input.value = event.key === 'Backspace' ? input.value.slice(0, -1) : input.value + event.key;
+  input.dispatchEvent(new Event('input', { bubbles: true }));
+});
 document.addEventListener('visibilitychange', () => { if (startedAt !== null && !finished) tick(); });
+window.addEventListener('resize', () => moveCaret(true));
 reset();
