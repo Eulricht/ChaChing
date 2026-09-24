@@ -69,6 +69,7 @@ a .project-badge { color: var(--hub-accent); }
 .project-action { display: flex; justify-content: space-between; gap: 16px; margin-top: auto; padding-top: 12px; border-top: 1px solid var(--hub-line); font-size: 12px; }
 .upcoming-project { opacity: 1; cursor: not-allowed; background: #1b1722; }
 .typing-symbol { color: var(--hub-muted); }
+.typing-symbol .accent-letter { color: var(--hub-accent); }
 .dashboard-footer { margin-top: 36px; color: var(--hub-muted); font-size: 11px; }
 
 .project-page .shell { min-height: calc(100vh - 80px); }

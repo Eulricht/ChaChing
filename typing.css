@@ -1,13 +1,12 @@
 .typing-main {
   width: min(100% - 80px, 1280px);
   margin: 30px auto 48px;
+  transition: margin 220ms ease;
 }
 
-.typing-heading { margin-bottom: 18px; }
-.typing-heading h1 { margin: 10px 0 0; font-size: clamp(42px, 5vw, 62px); font-weight: 500; letter-spacing: -.045em; }
-.typing-toolbar { display: flex; align-items: center; justify-content: flex-end; gap: 20px; padding-bottom: 10px; color: var(--hub-muted); font: 14px Consolas, monospace; }
+.typing-toolbar { display: flex; align-items: center; justify-content: flex-end; gap: 20px; max-height: 64px; padding-bottom: 10px; color: var(--hub-muted); font: 14px Consolas, monospace; opacity: 1; overflow: hidden; transition: opacity 160ms linear, max-height 220ms ease, padding 220ms ease; }
 .durations { display: flex; align-items: center; gap: 4px; }
-.typing-main button { min-height: 44px; padding: 10px 13px; border: 1px solid transparent; border-radius: 7px; color: var(--hub-muted); background: transparent; font: inherit; cursor: pointer; }
+.typing-main button { min-height: 44px; padding: 10px 13px; border: 1px solid transparent; border-radius: 7px; color: var(--hub-muted); background: transparent; font: inherit; cursor: var(--ui-cursor); }
 .typing-main button:hover, .typing-main button[aria-pressed="true"] { color: var(--hub-accent); background: var(--hub-hover); }
 #restart { margin-left: 10px; border-left-color: var(--hub-line); border-radius: 0 7px 7px 0; }
 .typing-stats { display: flex; flex-wrap: wrap; gap: 40px; margin: 16px 0 28px; color: var(--hub-muted); font: 15px Consolas, monospace; }
@@ -22,14 +21,14 @@
   position: absolute;
   top: 0;
   left: 0;
-  width: 2px;
-  height: 39px;
+  width: 3px;
+  height: 35px;
   border-radius: 2px;
   background: var(--hub-accent);
   pointer-events: none;
   transform: translate3d(0, 7px, 0);
   transition: transform 60ms linear;
-  animation: caret-blink 540ms ease-in-out infinite alternate;
+  animation: caret-blink 500ms linear infinite alternate;
   will-change: transform, opacity;
 }
 .typing-stage:not(.is-focused) .typing-caret, .typing-stage.is-finished .typing-caret { opacity: 0; animation: none; }
@@ -53,25 +52,56 @@
 .typing-capture { position: fixed; width: 1px; height: 1px; left: 0; bottom: 0; padding: 0; border: 0; opacity: 0; overflow: hidden; clip: rect(0, 0, 0, 0); clip-path: inset(50%); }
 .sr-only { position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip: rect(0, 0, 0, 0); white-space: nowrap; border: 0; }
 
+.project-page .site-nav { max-height: 84px; opacity: 1; overflow: hidden; transition: opacity 160ms linear, min-height 220ms ease, max-height 220ms ease, padding 220ms ease; }
+.project-page.test-running .site-nav { min-height: 0; max-height: 0; padding-top: 0; padding-bottom: 0; opacity: 0; pointer-events: none; }
+.test-running .typing-main { margin-top: 22px; }
+.test-running .typing-toolbar { max-height: 0; padding-bottom: 0; opacity: 0; pointer-events: none; }
+
+.results { display: grid; grid-template-columns: 124px minmax(0, 1fr); gap: 20px 32px; margin-top: 34px; padding-top: 26px; border-top: 1px solid var(--hub-line); color: var(--hub-muted); font: 14px Consolas, monospace; opacity: 0; transform: translateY(10px); transition: opacity 260ms linear, transform 260ms ease; }
+.results[hidden] { display: none; }
+.results.is-visible { opacity: 1; transform: translateY(0); }
+.result-score { display: grid; align-content: center; gap: 1px; }
+.result-score span { font-size: 16px; }
+.result-score strong { margin-bottom: 12px; color: var(--hub-accent); font-size: 44px; font-weight: 400; line-height: 1; }
+.chart-panel { position: relative; min-width: 0; }
+#result-chart { display: block; width: 100%; height: 230px; overflow: visible; }
+.chart-grid { stroke: #29262e; stroke-width: 1; }
+.chart-label { fill: #6f6975; font: 11px Consolas, monospace; }
+.chart-wpm { fill: none; stroke: var(--hub-accent); stroke-width: 3; stroke-linecap: round; stroke-linejoin: round; }
+.chart-raw { fill: none; stroke: #746d7b; stroke-width: 2.5; stroke-linecap: round; stroke-linejoin: round; stroke-dasharray: 7 7; }
+.chart-error { fill: #df859c; }
+.chart-legend { display: flex; justify-content: flex-end; gap: 22px; margin-top: -8px; font-size: 12px; }
+.chart-legend span::before { content: ''; display: inline-block; width: 14px; height: 2px; margin: 0 7px 3px 0; background: currentColor; }
+.chart-legend .wpm-key { color: var(--hub-accent); }
+.chart-legend .raw-key { color: #746d7b; }
+.chart-legend .error-key { color: #df859c; }
+.chart-legend .error-key::before { height: 5px; width: 5px; border-radius: 50%; }
+.result-details { grid-column: 1 / -1; display: grid; grid-template-columns: repeat(4, 1fr); gap: 28px; padding-top: 4px; }
+.result-details span { display: grid; gap: 4px; }
+.result-details strong { color: var(--hub-accent); font-size: 25px; font-weight: 400; }
+
 @keyframes caret-blink {
-  0%, 16% { opacity: 1; }
+  0%, 8% { opacity: 1; }
   100% { opacity: .16; }
 }
 
 @media (max-width: 600px) {
   .typing-main { width: calc(100% - 40px); margin-top: 20px; }
-  .typing-heading { margin-bottom: 20px; }
-  .typing-heading h1 { font-size: 42px; }
   .typing-toolbar { align-items: flex-start; }
   .typing-toolbar > span { padding-top: 14px; }
   .typing-stats { gap: 18px; margin: 26px 0; }
   .typing-stats strong { font-size: 25px; }
   .typing-stage, .word-window { height: 208px; min-height: 208px; }
   #words { font-size: 24px; }
-  .typing-caret { height: 30px; }
+  .typing-caret { height: 27px; }
+  .results { grid-template-columns: 1fr; gap: 18px; margin-top: 24px; }
+  .result-score { grid-template-columns: auto 1fr; align-items: baseline; gap: 4px 12px; }
+  .result-score strong { margin: 0; font-size: 34px; }
+  #result-chart { height: 180px; }
+  .result-details { grid-column: 1; grid-template-columns: repeat(2, 1fr); gap: 18px; }
 }
 
 @media (prefers-reduced-motion: reduce) {
   .typing-caret { transition: none; animation: none; opacity: 1; }
-  .focus-reminder { transition: none; }
+  .focus-reminder, .typing-toolbar, .project-page .site-nav, .results { transition: none; }
 }

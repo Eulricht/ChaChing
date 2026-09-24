@@ -14,11 +14,95 @@ let finished = false;
 let attempts = 0;
 let correctAttempts = 0;
 let previous = '';
+let samples = [];
+let lastSampleSecond = -1;
+let lastSampleErrors = 0;
+
+const results = document.getElementById('results');
+const svgNamespace = 'http://www.w3.org/2000/svg';
 
 function metrics(elapsed) {
   const correct = [...input.value].reduce((total, char, index) => total + Number(char === target[index]), 0);
-  return { wpm: elapsed > 0 ? Math.round(correct / 5 / (elapsed / 60)) : 0,
-    accuracy: attempts ? Math.round(correctAttempts / attempts * 100) : 100 };
+  const incorrect = input.value.length - correct;
+  const minutes = elapsed / 60;
+  return {
+    wpm: elapsed > 0 ? Math.round(correct / 5 / minutes) : 0,
+    raw: elapsed > 0 ? Math.round(input.value.length / 5 / minutes) : 0,
+    accuracy: attempts ? Math.round(correctAttempts / attempts * 100) : 100,
+    correct,
+    incorrect
+  };
+}
+
+function sampleProgress(elapsed, force = false) {
+  const second = Math.min(duration, Math.max(0, elapsed));
+  const wholeSecond = Math.floor(second);
+  if (!force && wholeSecond === lastSampleSecond) return;
+  const result = metrics(Math.max(second, .25));
+  const totalErrors = attempts - correctAttempts;
+  samples.push({ second, wpm: result.wpm, raw: result.raw, errors: Math.max(0, totalErrors - lastSampleErrors) });
+  lastSampleSecond = wholeSecond;
+  lastSampleErrors = totalErrors;
+}
+
+function svgElement(name, attributes = {}) {
+  const element = document.createElementNS(svgNamespace, name);
+  Object.entries(attributes).forEach(([key, value]) => element.setAttribute(key, value));
+  return element;
+}
+
+function renderChart() {
+  const chart = document.getElementById('result-chart');
+  chart.replaceChildren();
+  const width = 900;
+  const height = 260;
+  const padding = { left: 42, right: 18, top: 18, bottom: 30 };
+  const plotWidth = width - padding.left - padding.right;
+  const plotHeight = height - padding.top - padding.bottom;
+  const maxSpeed = Math.max(20, ...samples.flatMap(sample => [sample.wpm, sample.raw]));
+  const speedCeiling = Math.ceil(maxSpeed / 20) * 20;
+  const x = second => padding.left + second / duration * plotWidth;
+  const y = speed => padding.top + plotHeight - speed / speedCeiling * plotHeight;
+
+  for (let step = 0; step <= 4; step++) {
+    const speed = speedCeiling * step / 4;
+    const lineY = y(speed);
+    chart.append(svgElement('line', { x1: padding.left, y1: lineY, x2: width - padding.right, y2: lineY, class: 'chart-grid' }));
+    const label = svgElement('text', { x: padding.left - 9, y: lineY + 4, 'text-anchor': 'end', class: 'chart-label' });
+    label.textContent = Math.round(speed);
+    chart.append(label);
+  }
+
+  const tickCount = duration === 60 ? 6 : duration === 30 ? 6 : 5;
+  for (let step = 0; step <= tickCount; step++) {
+    const second = duration * step / tickCount;
+    const label = svgElement('text', { x: x(second), y: height - 7, 'text-anchor': 'middle', class: 'chart-label' });
+    label.textContent = `${Math.round(second)}s`;
+    chart.append(label);
+  }
+
+  const pathFor = key => samples.map((sample, index) => `${index ? 'L' : 'M'} ${x(sample.second).toFixed(1)} ${y(sample[key]).toFixed(1)}`).join(' ');
+  chart.append(svgElement('path', { d: pathFor('raw'), class: 'chart-raw' }));
+  chart.append(svgElement('path', { d: pathFor('wpm'), class: 'chart-wpm' }));
+  samples.filter(sample => sample.errors).forEach(sample => {
+    chart.append(svgElement('circle', { cx: x(sample.second), cy: y(sample.wpm), r: 3.5, class: 'chart-error' }));
+  });
+}
+
+function renderResults(result, elapsed) {
+  const speeds = samples.map(sample => sample.wpm).filter(Boolean);
+  const average = speeds.length ? speeds.reduce((sum, speed) => sum + speed, 0) / speeds.length : 0;
+  const variance = speeds.length ? speeds.reduce((sum, speed) => sum + (speed - average) ** 2, 0) / speeds.length : 0;
+  const consistency = average ? Math.max(0, Math.round(100 - Math.sqrt(variance) / average * 100)) : 100;
+  document.getElementById('result-wpm').textContent = result.wpm;
+  document.getElementById('result-accuracy').textContent = `${result.accuracy}%`;
+  document.getElementById('result-raw').textContent = result.raw;
+  document.getElementById('result-characters').textContent = `${result.correct} / ${result.incorrect}`;
+  document.getElementById('result-consistency').textContent = `${consistency}%`;
+  document.getElementById('result-time').textContent = `${Math.round(elapsed)}s`;
+  renderChart();
+  results.hidden = false;
+  requestAnimationFrame(() => results.classList.add('is-visible'));
 }
 
 function updateStats(elapsed = 0) {
@@ -35,8 +119,12 @@ function finish() {
   clearInterval(timer);
   input.disabled = true;
   stage.classList.add('is-finished');
-  const elapsed = Math.min(duration, (performance.now() - startedAt) / 1000);
+  const elapsed = startedAt === null ? duration : Math.min(duration, (performance.now() - startedAt) / 1000);
   const result = updateStats(elapsed);
+  sampleProgress(elapsed, true);
+  document.body.classList.remove('test-running');
+  document.body.classList.add('test-finished');
+  renderResults(result, elapsed);
   status.textContent = `Test complete. ${result.wpm} WPM, ${result.accuracy}% accuracy. Restart to try again.`;
 }
 
@@ -57,7 +145,10 @@ function moveCaret(instant = false) {
 function tick() {
   const elapsed = (performance.now() - startedAt) / 1000;
   if (elapsed >= duration) finish();
-  else updateStats(elapsed);
+  else {
+    updateStats(elapsed);
+    sampleProgress(elapsed);
+  }
 }
 
 function reset(focus = false) {
@@ -66,9 +157,15 @@ function reset(focus = false) {
   finished = false;
   attempts = correctAttempts = 0;
   previous = '';
+  samples = [{ second: 0, wpm: 0, raw: 0, errors: 0 }];
+  lastSampleSecond = 0;
+  lastSampleErrors = 0;
   input.value = '';
   input.disabled = false;
   stage.classList.remove('is-finished');
+  document.body.classList.remove('test-running', 'test-finished');
+  results.classList.remove('is-visible');
+  results.hidden = true;
   target = Array.from({ length: 250 }, () => vocabulary[Math.floor(Math.random() * vocabulary.length)]).join(' ');
   wordsElement.replaceChildren();
   characters = [];
@@ -103,6 +200,7 @@ input.addEventListener('input', () => {
   if (startedAt === null && input.value.length) {
     startedAt = performance.now();
     timer = setInterval(tick, 100);
+    document.body.classList.add('test-running');
     status.textContent = 'Keep going. Backspace is available for corrections.';
   }
   // Count new attempts, including corrections made in the middle of the input.
