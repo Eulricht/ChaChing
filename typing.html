@@ -4,10 +4,10 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Typing / Project Hub</title>
-  <link rel="stylesheet" href="dashboard.css?v=20260924-2">
+  <link rel="stylesheet" href="dashboard.css?v=20260924-3">
   <link rel="stylesheet" href="theme.css?v=20260924-2">
-  <link rel="stylesheet" href="typing.css?v=20260924-2">
-  <script src="typing.js?v=20260924-2" defer></script>
+  <link rel="stylesheet" href="typing.css?v=20260924-3">
+  <script src="typing.js?v=20260924-3" defer></script>
 </head>
 <body class="project-page">
   <nav class="site-nav" aria-label="Main navigation">
@@ -20,9 +20,8 @@
     </a>
   </nav>
   <main class="typing-main">
-    <header class="typing-heading"><p class="hub-eyebrow">Find your flow</p><h1>Just type.</h1><p>Small words. A clear mind. Your own pace.</p></header>
+    <header class="typing-heading"><p class="hub-eyebrow">Find your flow</p><h1>Just type.</h1></header>
     <div class="typing-toolbar">
-      <span>time / english</span>
       <div class="durations" role="group" aria-label="Test duration">
         <button type="button" data-seconds="15" aria-pressed="false">15s</button>
         <button type="button" data-seconds="30" aria-pressed="true">30s</button>
@@ -40,7 +39,7 @@
         <div id="words" aria-label="Text to type"></div>
         <span class="typing-caret" id="typing-caret" aria-hidden="true"></span>
       </div>
-      <div class="focus-reminder" id="focus-reminder" aria-hidden="true"><span>Click or tap to focus</span></div>
+      <div class="focus-reminder" id="focus-reminder" aria-hidden="true"><span>Click to focus</span></div>
     </div>
     <input class="typing-capture" id="typing-input" type="text" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" aria-label="Typing test input" aria-describedby="typing-status">
     <p class="sr-only" id="typing-status" role="status">Click the typing area to begin.</p>

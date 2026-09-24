@@ -1,21 +1,20 @@
 .typing-main {
-  width: min(100% - 80px, 1120px);
-  margin: 64px auto;
+  width: min(100% - 80px, 1280px);
+  margin: 30px auto 48px;
 }
 
-.typing-heading { margin-bottom: 52px; }
-.typing-heading h1 { margin: 12px 0; font-size: clamp(38px, 5vw, 54px); font-weight: 500; letter-spacing: -.045em; }
-.typing-heading > p:last-child { color: var(--hub-muted); font-size: 16px; }
-.typing-toolbar { display: flex; align-items: center; justify-content: space-between; gap: 20px; padding-bottom: 18px; color: var(--hub-muted); font: 13px Consolas, monospace; }
+.typing-heading { margin-bottom: 18px; }
+.typing-heading h1 { margin: 10px 0 0; font-size: clamp(42px, 5vw, 62px); font-weight: 500; letter-spacing: -.045em; }
+.typing-toolbar { display: flex; align-items: center; justify-content: flex-end; gap: 20px; padding-bottom: 10px; color: var(--hub-muted); font: 14px Consolas, monospace; }
 .durations { display: flex; align-items: center; gap: 4px; }
 .typing-main button { min-height: 44px; padding: 10px 13px; border: 1px solid transparent; border-radius: 7px; color: var(--hub-muted); background: transparent; font: inherit; cursor: pointer; }
 .typing-main button:hover, .typing-main button[aria-pressed="true"] { color: var(--hub-accent); background: var(--hub-hover); }
 #restart { margin-left: 10px; border-left-color: var(--hub-line); border-radius: 0 7px 7px 0; }
-.typing-stats { display: flex; flex-wrap: wrap; gap: 34px; margin: 34px 0; color: var(--hub-muted); font: 14px Consolas, monospace; }
-.typing-stats strong { color: var(--hub-accent); font-size: 30px; font-weight: 400; }
-.typing-stage { position: relative; min-height: 190px; cursor: text; }
-.word-window { position: relative; height: 190px; overflow: hidden; }
-#words { position: relative; font: 28px/1.9 Consolas, "Courier New", monospace; color: #6f6a75; overflow-wrap: anywhere; }
+.typing-stats { display: flex; flex-wrap: wrap; gap: 40px; margin: 16px 0 28px; color: var(--hub-muted); font: 15px Consolas, monospace; }
+.typing-stats strong { color: var(--hub-accent); font-size: 34px; font-weight: 400; }
+.typing-stage { position: relative; min-height: 244px; cursor: text; }
+.word-window { position: relative; height: 244px; overflow: hidden; }
+#words { position: relative; font: 32px/1.9 Consolas, "Courier New", monospace; color: #6f6a75; overflow-wrap: anywhere; }
 .typing-word { display: inline-block; white-space: pre; }
 #words .correct { color: var(--hub-text); }
 #words .incorrect { color: #df859c; background: #301a22; border-radius: 2px; }
@@ -24,13 +23,13 @@
   top: 0;
   left: 0;
   width: 2px;
-  height: 34px;
+  height: 39px;
   border-radius: 2px;
   background: var(--hub-accent);
   pointer-events: none;
   transform: translate3d(0, 7px, 0);
-  transition: transform 85ms linear;
-  animation: caret-blink 720ms ease-in-out infinite alternate;
+  transition: transform 60ms linear;
+  animation: caret-blink 540ms ease-in-out infinite alternate;
   will-change: transform, opacity;
 }
 .typing-stage:not(.is-focused) .typing-caret, .typing-stage.is-finished .typing-caret { opacity: 0; animation: none; }
@@ -55,21 +54,21 @@
 .sr-only { position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip: rect(0, 0, 0, 0); white-space: nowrap; border: 0; }
 
 @keyframes caret-blink {
-  0%, 35% { opacity: 1; }
-  100% { opacity: .18; }
+  0%, 16% { opacity: 1; }
+  100% { opacity: .16; }
 }
 
 @media (max-width: 600px) {
-  .typing-main { width: calc(100% - 40px); margin-top: 36px; }
-  .typing-heading { margin-bottom: 34px; }
-  .typing-heading h1 { font-size: 38px; }
+  .typing-main { width: calc(100% - 40px); margin-top: 20px; }
+  .typing-heading { margin-bottom: 20px; }
+  .typing-heading h1 { font-size: 42px; }
   .typing-toolbar { align-items: flex-start; }
   .typing-toolbar > span { padding-top: 14px; }
   .typing-stats { gap: 18px; margin: 26px 0; }
   .typing-stats strong { font-size: 25px; }
-  .typing-stage, .word-window { height: 176px; min-height: 176px; }
-  #words { font-size: 22px; }
-  .typing-caret { height: 28px; }
+  .typing-stage, .word-window { height: 208px; min-height: 208px; }
+  #words { font-size: 24px; }
+  .typing-caret { height: 30px; }
 }
 
 @media (prefers-reduced-motion: reduce) {
