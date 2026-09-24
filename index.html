@@ -4,25 +4,21 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Project Hub</title>
-  <link rel="stylesheet" href="dashboard.css?v=20260923-2">
+  <link rel="stylesheet" href="dashboard.css?v=20260924-1">
   <link rel="stylesheet" href="theme.css?v=20260924-1">
 </head>
 <body class="dashboard-page">
   <nav class="site-nav" aria-label="Main navigation">
-    <a class="hub-link" href="index.html" aria-current="page"><span class="hub-logo" aria-hidden="true">+</span> Project Hub</a>
-    <span class="nav-location">Home</span>
+    <a class="hub-link" href="index.html" aria-current="page">
+      <svg class="home-icon" viewBox="0 0 24 24" aria-hidden="true">
+        <path d="M4 10.5 12 4l8 6.5v8a1.5 1.5 0 0 1-1.5 1.5h-13A1.5 1.5 0 0 1 4 18.5v-8Z"></path>
+        <path d="M9.5 20v-6h5v6"></path>
+      </svg>
+      Home
+    </a>
   </nav>
   <main class="dashboard">
-    <header class="dashboard-header">
-      <p class="hub-eyebrow">Your collection</p>
-      <h1>A little space to play<span>.</span></h1>
-      <p class="hub-description">Pick a project. Make yourself at home.</p>
-    </header>
-    <section aria-labelledby="projects-title">
-      <div class="section-heading">
-        <h2 id="projects-title">Projects</h2>
-        <span>02 ready to play</span>
-      </div>
+    <section aria-label="Projects">
       <div class="project-grid">
         <a class="project-card" href="tic-tac-toe.html">
           <div class="project-meta"><span>01 / Strategy</span><span class="project-badge">Ready to play</span></div>
@@ -40,7 +36,6 @@
         </a>
       </div>
     </section>
-    <footer class="dashboard-footer">A small collection. Room to grow.</footer>
   </main>
 </body>
 </html>

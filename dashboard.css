@@ -28,10 +28,11 @@
   font-size: 13px;
 }
 .hub-link { display: inline-flex; align-items: center; gap: 12px; min-height: 40px; color: var(--hub-text); text-decoration: none; font-weight: 600; }
-.hub-link > span { color: var(--hub-accent); font-size: 22px; }
-.hub-logo { font-family: Consolas, monospace; }
+.hub-link > span { color: var(--hub-accent); }
+.home-icon { width: 18px; height: 18px; fill: none; stroke: var(--hub-accent); stroke-width: 1.6; stroke-linecap: round; stroke-linejoin: round; }
 .nav-location { color: var(--hub-muted); }
-.dashboard { width: min(100% - 48px, 880px); margin: 0 auto; padding: 72px 0 32px; }
+.dashboard-page .site-nav { border-bottom: 0; }
+.dashboard { width: min(100% - 48px, 880px); margin: 0 auto; padding: 48px 0 32px; }
 .dashboard-header { margin-bottom: 48px; }
 .hub-eyebrow { color: var(--hub-accent); font-size: 11px; letter-spacing: .14em; text-transform: uppercase; }
 .dashboard-header h1 { margin: 16px 0 12px; font-size: clamp(30px, 5vw, 44px); line-height: 1.15; letter-spacing: -.04em; font-weight: 600; }
@@ -74,8 +75,7 @@ a .project-badge { color: var(--hub-accent); }
 
 @media (max-width: 600px) {
   .site-nav { padding: 12px 20px; }
-  .dashboard { width: calc(100% - 40px); padding-top: 40px; }
-  .dashboard-header { margin-bottom: 32px; }
+  .dashboard { width: calc(100% - 40px); padding-top: 28px; }
   .project-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px; }
   .project-card { padding: 16px; }
 }
