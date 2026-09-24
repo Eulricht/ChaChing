@@ -3,60 +3,39 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Tic Tac Toe</title>
-  <link rel="stylesheet" href="styles.css?v=20260417-1">
+  <title>Project Hub</title>
+  <link rel="stylesheet" href="dashboard.css?v=20260923-1">
 </head>
-<body>
-  <main class="shell">
-    <section class="game">
-      <div class="eyebrow">Board Game</div>
-      <div class="heading">
-        <div>
-          <h1>Tic Tac Toe</h1>
-          <p class="subtitle">Say Wallahi</p>
-        </div>
-        <button class="reset" id="reset" type="button">New Game</button>
+<body class="dashboard-page">
+  <main class="dashboard">
+    <header class="dashboard-header">
+      <p class="hub-eyebrow">The collection</p>
+      <h1>Project Hub<span>.</span></h1>
+      <p class="hub-description">Games, experiments, and whatever comes next. Pick a project to get started.</p>
+    </header>
+    <section aria-labelledby="projects-title">
+      <div class="section-heading">
+        <h2 id="projects-title">Projects</h2>
+        <span>01 ready / 01 upcoming</span>
       </div>
-
-      <div class="status-panel">
-        <p class="status-label">Match Status</p>
-        <p class="status" id="status">Player X's turn</p>
-        <div class="status-meta">
-          <span class="meta-pill" id="round-label">Round 1</span>
-        </div>
+      <div class="project-grid">
+        <a class="project-card" href="tic-tac-toe.html">
+          <div class="project-meta"><span>01 / Strategy</span><span class="project-badge">Ready to play</span></div>
+          <div class="project-symbol" aria-hidden="true">X <span>O</span></div>
+          <h3>Tic Tac Toe</h3>
+          <p>Nine squares. Two players. Make your next move count.</p>
+          <span class="project-action">Open game <span aria-hidden="true">&nearr;</span></span>
+        </a>
+        <button class="project-card upcoming-project" type="button" disabled>
+          <span class="project-meta"><span>02 / Speed</span><span class="project-badge">Coming soon</span></span>
+          <span class="project-symbol typing-symbol" aria-hidden="true">Aa<span>_</span></span>
+          <span class="project-title">Typing Game</span>
+          <span class="project-description">A new challenge for your speed and accuracy. In the works.</span>
+          <span class="project-action">Coming soon <span aria-hidden="true">&middot;&middot;&middot;</span></span>
+        </button>
       </div>
-
-      <section class="scoreboard" aria-label="Player markers">
-        <div class="score-card is-active" id="card-x">
-          <span class="score-label">Player X</span>
-          <span class="score-mark">X</span>
-          <span class="score-value" id="score-x">0</span>
-        </div>
-        <div class="score-card" id="card-o">
-          <span class="score-label">Player O</span>
-          <span class="score-mark">O</span>
-          <span class="score-value" id="score-o">0</span>
-        </div>
-      </section>
-
-      <section class="insights" aria-label="Game insights">
-        <div class="insight-card">
-          <span class="insight-label">Draws</span>
-          <span class="insight-value" id="score-draw">0</span>
-        </div>
-        <div class="insight-card">
-          <span class="insight-label">Moves</span>
-          <span class="insight-value" id="move-count">0</span>
-        </div>
-        <div class="insight-card">
-          <span class="insight-label">Streak</span>
-          <span class="insight-value" id="streak-label">None</span>
-        </div>
-      </section>
-
-      <section class="board" id="board" aria-label="Tic Tac Toe board"></section>
     </section>
+    <footer class="dashboard-footer">A small collection. Room to grow.</footer>
   </main>
-  <script src="script.js?v=20260417-1"></script>
 </body>
 </html>

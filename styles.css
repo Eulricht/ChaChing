@@ -338,11 +338,13 @@ h1 {
 }
 
 .mark.is-static line,
-.mark.is-static path {
+.mark.is-static path,
+.mark.is-static circle {
   stroke-dashoffset: 0;
 }
 
 .mark path,
+.mark circle,
 .mark line {
   fill: none;
   stroke-width: 9;
@@ -358,18 +360,22 @@ h1 {
   stroke-dashoffset: 100;
 }
 
-.mark-o path {
+.mark-o circle {
   stroke: var(--accent-warm);
   stroke-dasharray: 100;
   stroke-dashoffset: -100;
+  stroke-linecap: butt;
+  transform: rotate(-90deg);
+  transform-origin: 50% 50%;
+  transform-box: fill-box;
 }
 
 .mark.is-drawing.mark-x line {
   animation: draw-x-stroke 0.14s linear forwards;
 }
 
-.mark.is-drawing.mark-o path {
-  animation: draw-o-stroke 0.18s linear forwards;
+.mark.is-drawing.mark-o circle {
+  animation: draw-o-stroke 0.22s linear forwards;
 }
 
 .mark-x line:last-child {

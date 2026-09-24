@@ -117,7 +117,7 @@ function createMark(value) {
 
   mark.innerHTML = [
     '<svg viewBox="0 0 100 100" aria-hidden="true" focusable="false">',
-    '<path d="M 50 18 A 32 32 0 1 1 49.99 18" pathLength="100"></path>',
+    '<circle cx="50" cy="50" r="32" pathLength="100"></circle>',
     "</svg>"
   ].join("");
   return mark;
