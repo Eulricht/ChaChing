@@ -17,6 +17,7 @@ let previous = '';
 let samples = [];
 let lastSampleSecond = -1;
 let lastSampleErrors = 0;
+let caretIdleTimer = null;
 
 const results = document.getElementById('results');
 const svgNamespace = 'http://www.w3.org/2000/svg';
@@ -142,6 +143,12 @@ function moveCaret(instant = false) {
   if (instant) requestAnimationFrame(() => caretElement.style.removeProperty('transition'));
 }
 
+function showActiveCaret() {
+  clearTimeout(caretIdleTimer);
+  caretElement.classList.add('is-moving');
+  caretIdleTimer = setTimeout(() => caretElement.classList.remove('is-moving'), 180);
+}
+
 function tick() {
   const elapsed = (performance.now() - startedAt) / 1000;
   if (elapsed >= duration) finish();
@@ -153,6 +160,7 @@ function tick() {
 
 function reset(focus = false) {
   clearInterval(timer);
+  clearTimeout(caretIdleTimer);
   startedAt = null;
   finished = false;
   attempts = correctAttempts = 0;
@@ -163,6 +171,7 @@ function reset(focus = false) {
   input.value = '';
   input.disabled = false;
   stage.classList.remove('is-finished');
+  caretElement.classList.remove('is-moving');
   document.body.classList.remove('test-running', 'test-finished');
   results.classList.remove('is-visible');
   results.hidden = true;
@@ -213,6 +222,7 @@ input.addEventListener('input', () => {
     if (input.value[i] === target[i]) correctAttempts++;
   }
   previous = input.value;
+  showActiveCaret();
   characters.forEach((span, i) => {
     span.className = i < input.value.length ? (input.value[i] === target[i] ? 'correct' : 'incorrect') : '';
   });
@@ -226,6 +236,10 @@ input.addEventListener('input', () => {
 });
 stage.addEventListener('click', () => {
   if (!finished) input.focus();
+});
+document.addEventListener('click', event => {
+  if (finished || event.target.closest('a, button')) return;
+  input.focus({ preventScroll: true });
 });
 input.addEventListener('focus', () => stage.classList.add('is-focused'));
 input.addEventListener('blur', () => stage.classList.remove('is-focused'));
