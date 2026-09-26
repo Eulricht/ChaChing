@@ -45,7 +45,8 @@ let streak = {
   count: 0
 };
 let introAnimationTimer = null;
-const INTRO_CELL_DELAY = 22;
+const INTRO_CELL_DELAY = 95;
+const INTRO_DURATION = 720;
 
 function createBoard() {
   boardElement.querySelectorAll(".cell").forEach(cell => cell.remove());
@@ -124,7 +125,7 @@ function createMark(value) {
 
   mark.innerHTML = [
     '<svg viewBox="0 0 100 100" aria-hidden="true" focusable="false">',
-    '<path d="M50 18a32 32 0 1 1-.01 0" pathLength="100"></path>',
+    '<path d="M50 18 A32 32 0 1 1 50 82 A32 32 0 1 1 50 18" pathLength="100"></path>',
     "</svg>"
   ].join("");
   return mark;
@@ -265,12 +266,14 @@ function triggerIntroAnimation() {
   introAnimationTimer = window.setTimeout(() => {
     boardElement.classList.remove("is-intro");
     introAnimationTimer = null;
-  }, 720);
+  }, INTRO_DURATION + INTRO_CELL_DELAY * 4 + 120);
 }
 
 function applyIntroDelays() {
   boardElement.querySelectorAll(".cell").forEach((element, index) => {
-    element.style.setProperty("--intro-delay", `${index * INTRO_CELL_DELAY}ms`);
+    const row = Math.floor(index / 3);
+    const column = index % 3;
+    element.style.setProperty("--intro-delay", `${(row + column) * INTRO_CELL_DELAY}ms`);
   });
 }
 
@@ -286,47 +289,60 @@ function findTacticalMove(player) {
   });
 }
 
-function minimax(state, maximizing) {
+function minimax(state, maximizing, depth = 0) {
   const winner = getWinner(state);
-  if (winner?.player === "O") return 10;
-  if (winner?.player === "X") return -10;
+  if (winner?.player === "O") return 10 - depth;
+  if (winner?.player === "X") return depth - 10;
   const choices = openCells(state);
   if (!choices.length) return 0;
 
   const scoresForMoves = choices.map(index => {
     const next = [...state];
     next[index] = maximizing ? "O" : "X";
-    return minimax(next, !maximizing);
+    return minimax(next, !maximizing, depth + 1);
   });
   return maximizing ? Math.max(...scoresForMoves) : Math.min(...scoresForMoves);
 }
 
-function chooseComputerMove() {
-  const choices = openCells();
-  if (gameMode === "easy") return choices[Math.floor(Math.random() * choices.length)];
+function randomChoice(choices) {
+  return choices[Math.floor(Math.random() * choices.length)];
+}
 
-  const winningMove = findTacticalMove("O");
-  const blockingMove = findTacticalMove("X");
-  if (winningMove !== undefined) return winningMove;
-  if (blockingMove !== undefined) return blockingMove;
+function sensibleMove(choices) {
+  const corners = choices.filter(index => [0, 2, 6, 8].includes(index));
+  if (choices.includes(4) && Math.random() < .45) return 4;
+  if (corners.length && Math.random() < .7) return randomChoice(corners);
+  return randomChoice(choices);
+}
 
-  if (gameMode === "medium") {
-    if (!boardState[4]) return 4;
-    return choices[Math.floor(Math.random() * choices.length)];
-  }
-
-  let bestScore = -Infinity;
-  let bestMove = choices[0];
-  choices.forEach(index => {
+function optimalMoves(choices) {
+  const scoredMoves = choices.map(index => {
     const next = [...boardState];
     next[index] = "O";
-    const score = minimax(next, false);
-    if (score > bestScore) {
-      bestScore = score;
-      bestMove = index;
-    }
+    return { index, score: minimax(next, false, 1) };
   });
-  return bestMove;
+  const bestScore = Math.max(...scoredMoves.map(move => move.score));
+  return scoredMoves.filter(move => move.score === bestScore).map(move => move.index);
+}
+
+function chooseComputerMove() {
+  const choices = openCells();
+  const winningMove = findTacticalMove("O");
+  const blockingMove = findTacticalMove("X");
+
+  if (gameMode === "easy") {
+    if (winningMove !== undefined && Math.random() < .6) return winningMove;
+    if (blockingMove !== undefined && Math.random() < .18) return blockingMove;
+    return sensibleMove(choices);
+  }
+
+  if (gameMode === "medium") {
+    if (winningMove !== undefined) return winningMove;
+    if (blockingMove !== undefined && Math.random() < .72) return blockingMove;
+    return Math.random() < .5 ? randomChoice(optimalMoves(choices)) : sensibleMove(choices);
+  }
+
+  return randomChoice(optimalMoves(choices));
 }
 
 function playComputerMove() {
