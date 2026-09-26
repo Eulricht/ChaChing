@@ -282,7 +282,7 @@ document.addEventListener('keydown', event => {
   input.focus();
   input.value = event.key === 'Backspace' ? input.value.slice(0, -1) : input.value + event.key;
   input.dispatchEvent(new Event('input', { bubbles: true }));
-});
+}, true);
 document.addEventListener('visibilitychange', () => { if (startedAt !== null && !finished) tick(); });
 window.addEventListener('resize', () => moveCaret(true));
 reset();

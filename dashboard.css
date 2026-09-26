@@ -28,7 +28,7 @@
   font-size: 15px;
 }
 .hub-link { display: inline-flex; align-items: center; gap: 12px; min-height: 48px; padding: 0 15px; border: 1px solid var(--hub-line); border-radius: 9px; color: var(--hub-text); background: var(--hub-surface, #201a28); text-decoration: none; font: inherit; font-weight: 600; cursor: var(--ui-cursor, pointer); transition: color 160ms ease, background-color 160ms ease, border-color 160ms ease; }
-.hub-link:hover { color: #fff; background: var(--hub-hover, #272030); border-color: var(--hub-accent); }
+.hub-link:hover { color: var(--hub-text); background: var(--hub-hover, #272030); border-color: var(--hub-accent); }
 .hub-link > span { color: var(--hub-accent); }
 .home-icon { width: 21px; height: 21px; fill: none; stroke: var(--hub-accent); stroke-width: 1.6; stroke-linecap: round; stroke-linejoin: round; }
 .nav-location { color: var(--hub-muted); }

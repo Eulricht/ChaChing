@@ -8,6 +8,7 @@ const projects = {
   typing: { path: 'projects/typing/index.html', title: 'Typing Game' }
 };
 let changingView = false;
+let activeProject = null;
 
 function waitForTransition() {
   return new Promise(resolve => window.setTimeout(resolve, shellMotion.matches ? 0 : 220));
@@ -37,6 +38,7 @@ async function openProject(projectName) {
   dashboardView.hidden = true;
   dashboardView.classList.remove('is-leaving');
   document.body.classList.add('project-open');
+  activeProject = projectName;
   shellHome.removeAttribute('aria-current');
   document.title = `${project.title} / Project Hub`;
   projectFrame.title = project.title;
@@ -53,6 +55,7 @@ async function showDashboard() {
   projectView.hidden = true;
   projectView.classList.remove('is-leaving');
   document.body.classList.remove('project-open');
+  activeProject = null;
   shellHome.setAttribute('aria-current', 'page');
   document.title = 'Project Hub';
   enterView(dashboardView);
@@ -66,6 +69,14 @@ document.querySelectorAll('[data-project]').forEach(button => {
 });
 
 shellHome.addEventListener('click', showDashboard);
+
+document.addEventListener('keydown', event => {
+  if (event.key !== 'Tab' || activeProject !== 'typing' || projectView.hidden) return;
+  const restartButton = projectFrame.contentDocument?.getElementById('restart');
+  if (!restartButton) return;
+  event.preventDefault();
+  restartButton.focus({ preventScroll: true });
+}, true);
 
 window.addEventListener('message', event => {
   if (event.origin === window.location.origin && event.data?.type === 'project-home') showDashboard();
