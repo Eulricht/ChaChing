@@ -250,13 +250,13 @@ input.addEventListener('input', () => {
   if (startedAt !== null) tick();
   if (input.value.length === target.length) finish();
 });
-stage.addEventListener('click', () => {
-  if (!finished) input.focus();
-});
-document.addEventListener('click', event => {
+document.addEventListener('pointerdown', event => {
   if (finished || event.target.closest('a, button')) return;
+
+  // Focus before the browser can select text or briefly blur the capture input.
+  event.preventDefault();
   input.focus({ preventScroll: true });
-});
+}, true);
 input.addEventListener('focus', () => stage.classList.add('is-focused'));
 input.addEventListener('blur', () => stage.classList.remove('is-focused'));
 restartButton.addEventListener('focus', () => stage.classList.add('is-restarting'));

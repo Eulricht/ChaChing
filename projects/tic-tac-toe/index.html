@@ -4,9 +4,9 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Tic Tac Toe</title>
-  <link rel="stylesheet" href="styles.css?v=20260417-2">
+  <link rel="stylesheet" href="styles.css?v=20260926-1">
   <link rel="stylesheet" href="../../dashboard.css?v=20260926-4">
-  <link rel="stylesheet" href="../../theme.css?v=20260926-4">
+  <link rel="stylesheet" href="../../theme.css?v=20260926-5">
   <script src="../../project-host.js?v=20260926-2" defer></script>
 </head>
 <body class="project-page">
@@ -21,32 +21,25 @@
   </nav>
   <main class="shell">
     <section class="game">
-      <div class="eyebrow">Board Game</div>
-      <div class="heading">
-        <div>
-          <h1>Tic Tac Toe</h1>
-          <p class="subtitle">Say Wallahi</p>
+      <header class="game-toolbar">
+        <div class="match-copy">
+          <span class="round" id="round-label">Round 1</span>
+          <p class="status" id="status">Player X's turn</p>
         </div>
         <button class="reset" id="reset" type="button">New Game</button>
-      </div>
+      </header>
 
-      <div class="status-panel">
-        <p class="status-label">Match Status</p>
-        <p class="status" id="status">Player X's turn</p>
-        <div class="status-meta">
-          <span class="meta-pill" id="round-label">Round 1</span>
-        </div>
-      </div>
+      <section class="board" id="board" aria-label="Tic Tac Toe board"></section>
 
       <section class="scoreboard" aria-label="Player markers">
         <div class="score-card is-active" id="card-x">
-          <span class="score-label">Player X</span>
           <span class="score-mark">X</span>
+          <span class="score-label">Player X</span>
           <span class="score-value" id="score-x">0</span>
         </div>
         <div class="score-card" id="card-o">
-          <span class="score-label">Player O</span>
           <span class="score-mark">O</span>
+          <span class="score-label">Player O</span>
           <span class="score-value" id="score-o">0</span>
         </div>
       </section>
@@ -66,9 +59,8 @@
         </div>
       </section>
 
-      <section class="board" id="board" aria-label="Tic Tac Toe board"></section>
     </section>
   </main>
-  <script src="script.js?v=20260417-2"></script>
+  <script src="script.js?v=20260926-1"></script>
 </body>
 </html>

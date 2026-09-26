@@ -248,7 +248,7 @@ function triggerIntroAnimation() {
 
 function applyIntroDelays() {
   const animatedElements = [
-    ...gameElement.querySelectorAll(".status-panel, .scoreboard, .insight-card, .board, .cell")
+    ...gameElement.querySelectorAll(".game-toolbar, .board, .cell, .scoreboard, .insights")
   ];
 
   const viewportWidth = Math.max(window.innerWidth, 1);

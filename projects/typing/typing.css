@@ -1,6 +1,8 @@
 .typing-main {
   width: min(100% - 72px, 1380px);
   margin: 68px auto 54px;
+  user-select: none;
+  -webkit-user-select: none;
 }
 
 .typing-toolbar { display: flex; align-items: center; justify-content: flex-end; gap: 22px; padding-bottom: 0; color: var(--hub-muted); font: 15px Consolas, monospace; opacity: 1; transition: opacity 240ms ease; }
@@ -45,7 +47,7 @@
   place-items: center;
   border-radius: 12px;
   color: #c7bbd3;
-  background: rgba(12, 12, 15, .48);
+  background: rgba(18, 18, 22, .54);
   backdrop-filter: blur(1px);
   opacity: 1;
   transition: opacity 150ms ease;
@@ -53,7 +55,7 @@
   font-size: 13px;
   letter-spacing: .03em;
 }
-.focus-reminder span { padding: 10px 14px; border: 1px solid #44374f; border-radius: 999px; background: #151219; cursor: var(--ui-text-cursor); }
+.focus-reminder span { padding: 10px 14px; border: 1px solid #3e3548; border-radius: 999px; background: #18181d; cursor: var(--ui-text-cursor); }
 .typing-stage.is-focused .focus-reminder, .typing-stage.is-finished .focus-reminder, .typing-stage.is-restarting .focus-reminder { opacity: 0; }
 .typing-capture { position: fixed; width: 1px; height: 1px; left: 0; bottom: 0; padding: 0; border: 0; opacity: 0; overflow: hidden; clip: rect(0, 0, 0, 0); clip-path: inset(50%); }
 .sr-only { position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip: rect(0, 0, 0, 0); white-space: nowrap; border: 0; }
