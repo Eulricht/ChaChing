@@ -1,11 +1,12 @@
 :root {
   color-scheme: dark;
-  --hub-bg: #121216;
+  --hub-bg: #0f0f13;
   --hub-surface: #18181d;
   --hub-hover: #202027;
   --hub-text: #c9c6ce;
   --hub-muted: #99939f;
   --hub-accent: #9d78ca;
+  --hub-accent-strong: #aa86d5;
   --hub-line: #302d35;
   --bg: var(--hub-bg);
   --panel: var(--hub-surface);
@@ -16,7 +17,7 @@
   --text: var(--hub-text);
   --muted: var(--hub-muted);
   --accent: var(--hub-accent);
-  --accent-strong: #aa86d5;
+  --accent-strong: var(--hub-accent-strong);
   --accent-warm: #ada8b4;
   --ui-cursor: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='28' height='28' viewBox='0 0 28 28'%3E%3Cpath d='M4 3.5v19l5.2-5.1 4.1 7.4 3.5-1.9-4-7.2 7.2-1.2z' fill='%2318181d' stroke='%239d78ca' stroke-width='1.7' stroke-linejoin='round'/%3E%3C/svg%3E") 4 4, auto;
   --ui-text-cursor: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='26' height='30' viewBox='0 0 26 30'%3E%3Cpath d='M8 4h10M13 4v22M8 26h10' fill='none' stroke='%2318181d' stroke-width='4' stroke-linecap='round'/%3E%3Cpath d='M8 4h10M13 4v22M8 26h10' fill='none' stroke='%239d78ca' stroke-width='1.8' stroke-linecap='round'/%3E%3C/svg%3E") 13 15, text;
@@ -28,11 +29,11 @@ body.dashboard-page, body.project-page { background: var(--hub-bg); color: var(-
 .project-card, .upcoming-project { background: var(--hub-surface); }
 a.project-card:hover { background: var(--hub-hover); border-color: var(--hub-accent); }
 .project-symbol span { color: var(--hub-muted); }
-.project-page .game { --accent: var(--hub-accent); --accent-strong: var(--accent-strong); backdrop-filter: none; }
+.project-page .game { --accent: var(--hub-accent); --accent-strong: var(--hub-accent-strong); backdrop-filter: none; }
 .project-page .cell { background: var(--cell); }
 .project-page .cell:hover:not(:disabled) { background: var(--cell-hover); border-color: var(--accent); }
 .project-page .score-card.is-active { color: var(--hub-text); }
-.project-page .cell.last-move { box-shadow: inset 0 0 0 1px #51445f; animation: none; }
+.project-page .cell.last-move:not(.win) { box-shadow: inset 0 0 0 1px #51445f; animation: none; }
 .project-page .cell.win { background: #27202f; border-color: var(--accent); box-shadow: inset 0 0 0 1px #51445f; }
 button, a { -webkit-tap-highlight-color: transparent; }
 :focus-visible { outline: 2px solid var(--hub-accent); outline-offset: 4px; }

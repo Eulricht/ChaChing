@@ -4,12 +4,12 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Tic Tac Toe</title>
-  <link rel="stylesheet" href="styles.css?v=20260926-1">
+  <link rel="stylesheet" href="styles.css?v=20260926-2">
   <link rel="stylesheet" href="../../dashboard.css?v=20260926-4">
-  <link rel="stylesheet" href="../../theme.css?v=20260926-5">
+  <link rel="stylesheet" href="../../theme.css?v=20260926-7">
   <script src="../../project-host.js?v=20260926-2" defer></script>
 </head>
-<body class="project-page">
+<body class="project-page ttt-page">
   <nav class="site-nav" aria-label="Main navigation">
     <button class="hub-link" type="button" data-project-home>
       <svg class="home-icon" viewBox="0 0 24 24" aria-hidden="true">
@@ -20,47 +20,63 @@
     </button>
   </nav>
   <main class="shell">
-    <section class="game">
-      <header class="game-toolbar">
-        <div class="match-copy">
-          <span class="round" id="round-label">Round 1</span>
-          <p class="status" id="status">Player X's turn</p>
-        </div>
-        <button class="reset" id="reset" type="button">New Game</button>
-      </header>
+    <div class="game-layout">
+      <section class="game">
+        <header class="game-toolbar">
+          <div class="match-copy">
+            <span class="round" id="round-label">Round 1</span>
+            <p class="status" id="status">Player X's turn</p>
+          </div>
+          <button class="reset" id="reset" type="button">New Game</button>
+        </header>
 
-      <section class="board" id="board" aria-label="Tic Tac Toe board"></section>
+        <section class="board" id="board" aria-label="Tic Tac Toe board">
+          <svg class="win-line" id="win-line" viewBox="0 0 100 100" aria-hidden="true" preserveAspectRatio="none">
+            <line id="win-line-path" pathLength="100"></line>
+          </svg>
+        </section>
 
-      <section class="scoreboard" aria-label="Player markers">
-        <div class="score-card is-active" id="card-x">
-          <span class="score-mark">X</span>
-          <span class="score-label">Player X</span>
-          <span class="score-value" id="score-x">0</span>
-        </div>
-        <div class="score-card" id="card-o">
-          <span class="score-mark">O</span>
-          <span class="score-label">Player O</span>
-          <span class="score-value" id="score-o">0</span>
-        </div>
+        <section class="scoreboard" aria-label="Player markers">
+          <div class="score-card is-active" id="card-x">
+            <span class="score-mark">X</span>
+            <span class="score-label" id="label-x">Player X</span>
+            <span class="score-value" id="score-x">0</span>
+          </div>
+          <div class="score-card" id="card-o">
+            <span class="score-mark">O</span>
+            <span class="score-label" id="label-o">Player O</span>
+            <span class="score-value" id="score-o">0</span>
+          </div>
+        </section>
+
+        <section class="insights" aria-label="Game insights">
+          <div class="insight-card">
+            <span class="insight-label">Draws</span>
+            <span class="insight-value" id="score-draw">0</span>
+          </div>
+          <div class="insight-card">
+            <span class="insight-label">Moves</span>
+            <span class="insight-value" id="move-count">0</span>
+          </div>
+          <div class="insight-card">
+            <span class="insight-label">Streak</span>
+            <span class="insight-value" id="streak-label">None</span>
+          </div>
+        </section>
       </section>
 
-      <section class="insights" aria-label="Game insights">
-        <div class="insight-card">
-          <span class="insight-label">Draws</span>
-          <span class="insight-value" id="score-draw">0</span>
+      <aside class="settings" aria-labelledby="mode-title">
+        <span class="settings-label">Settings</span>
+        <h2 id="mode-title">Game mode</h2>
+        <div class="mode-options" role="radiogroup" aria-label="Game mode">
+          <button class="mode-option" type="button" role="radio" aria-checked="false" data-mode="easy"><span>Easy</span><small>Relaxed</small></button>
+          <button class="mode-option" type="button" role="radio" aria-checked="false" data-mode="medium"><span>Medium</span><small>Strategic</small></button>
+          <button class="mode-option" type="button" role="radio" aria-checked="false" data-mode="impossible"><span>Impossible</span><small>Perfect play</small></button>
+          <button class="mode-option is-selected is-versus" type="button" role="radio" aria-checked="true" data-mode="pvp"><span>Player vs Player</span><small>Local match</small></button>
         </div>
-        <div class="insight-card">
-          <span class="insight-label">Moves</span>
-          <span class="insight-value" id="move-count">0</span>
-        </div>
-        <div class="insight-card">
-          <span class="insight-label">Streak</span>
-          <span class="insight-value" id="streak-label">None</span>
-        </div>
-      </section>
-
-    </section>
+      </aside>
+    </div>
   </main>
-  <script src="script.js?v=20260926-1"></script>
+  <script src="script.js?v=20260926-2"></script>
 </body>
 </html>

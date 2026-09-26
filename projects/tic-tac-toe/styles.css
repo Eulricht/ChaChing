@@ -728,3 +728,186 @@ body {
   .insights { grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 15px; margin-top: 24px; padding-inline: 1px; }
   .insight-value { font-size: 18px; }
 }
+
+/* Mode panel and stabilized game animation */
+.shell {
+  padding-top: 62px;
+}
+
+.game-layout {
+  display: grid;
+  grid-template-columns: minmax(0, 520px) 220px;
+  align-items: start;
+  gap: 52px;
+  width: min(100%, 792px);
+}
+
+.game { width: 100%; }
+
+.board.is-intro .cell {
+  animation-duration: 340ms;
+}
+
+.mark-x line,
+.mark-o path {
+  stroke: var(--accent-strong);
+}
+
+.mark-o path {
+  stroke-dasharray: 100;
+  stroke-dashoffset: -100;
+  stroke-linecap: round;
+  transform: none;
+}
+
+.mark.is-static line,
+.mark.is-static path {
+  stroke-dasharray: none;
+  stroke-dashoffset: 0;
+}
+
+.mark.is-drawing.mark-o path {
+  animation: draw-o-stroke 200ms linear forwards;
+}
+
+.score-mark,
+#card-o .score-mark,
+.score-card.is-active .score-value {
+  color: var(--accent-strong);
+}
+
+.score-card.is-active {
+  border-color: var(--accent-strong);
+}
+
+.cell.win {
+  border-color: #705d86;
+  background: var(--cell);
+  box-shadow: inset 0 0 0 1px rgba(170, 134, 213, .12);
+  animation: win-outline 1.6s ease-in-out infinite;
+}
+
+.win-line {
+  position: absolute;
+  inset: 0;
+  z-index: 3;
+  width: 100%;
+  height: 100%;
+  overflow: visible;
+  pointer-events: none;
+}
+
+.win-line line {
+  fill: none;
+  stroke: var(--accent-strong);
+  stroke-width: 1.35;
+  stroke-linecap: round;
+  stroke-dasharray: 100;
+  stroke-dashoffset: 100;
+  opacity: 0;
+  filter: drop-shadow(0 0 3px rgba(170, 134, 213, .25));
+}
+
+.win-line.is-visible line {
+  opacity: .82;
+  animation: draw-win-line 780ms cubic-bezier(.22, 1, .36, 1) 120ms forwards;
+}
+
+.settings {
+  margin-top: 87px;
+  color: var(--muted);
+}
+
+.settings-label {
+  display: block;
+  margin-bottom: 7px;
+  color: #77717e;
+  font: 11px Consolas, monospace;
+  letter-spacing: .08em;
+  text-transform: uppercase;
+}
+
+.settings h2 {
+  margin: 0 0 18px;
+  color: var(--text);
+  font-size: 18px;
+  font-weight: 500;
+  letter-spacing: -.02em;
+}
+
+.mode-options {
+  display: grid;
+  gap: 6px;
+}
+
+.mode-option {
+  display: grid;
+  grid-template-columns: 1fr auto;
+  align-items: baseline;
+  gap: 10px;
+  width: 100%;
+  min-height: 44px;
+  padding: 10px 11px;
+  border: 1px solid transparent;
+  border-radius: 8px;
+  color: #817b87;
+  background: transparent;
+  text-align: left;
+  font: 14px "Segoe UI Variable Display", "Segoe UI", sans-serif;
+  transition: color 150ms ease, border-color 150ms ease, background-color 150ms ease;
+}
+
+.mode-option small {
+  color: #5f5a64;
+  font: 10px Consolas, monospace;
+}
+
+.mode-option:hover {
+  color: var(--text);
+  background: #17171c;
+}
+
+.mode-option.is-selected {
+  color: var(--accent-strong);
+  border-color: #4d405b;
+  background: #18151d;
+}
+
+.mode-option.is-selected small { color: #9a7fba; }
+.mode-option.is-versus { margin-top: 12px; }
+
+@keyframes draw-win-line {
+  from { stroke-dashoffset: 100; }
+  to { stroke-dashoffset: 0; }
+}
+
+@keyframes win-outline {
+  0%, 100% { border-color: #5b4c6b; box-shadow: inset 0 0 0 1px rgba(170, 134, 213, .08); }
+  50% { border-color: #78628f; box-shadow: inset 0 0 0 1px rgba(170, 134, 213, .16); }
+}
+
+@media (max-width: 820px) {
+  .game-layout {
+    grid-template-columns: minmax(0, 520px);
+    justify-content: center;
+    width: 100%;
+  }
+
+  .settings {
+    margin-top: 4px;
+    padding-top: 26px;
+  }
+
+  .mode-options { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .mode-option.is-versus { margin-top: 0; }
+}
+
+@media (max-width: 640px) {
+  .shell { padding-top: 38px; }
+  .game-layout { gap: 30px; }
+}
+
+@media (max-width: 430px) {
+  .mode-options { grid-template-columns: 1fr; }
+  .mode-option.is-versus { margin-top: 8px; }
+}

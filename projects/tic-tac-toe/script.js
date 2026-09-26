@@ -1,4 +1,3 @@
-const gameElement = document.querySelector(".game");
 const boardElement = document.getElementById("board");
 const statusElement = document.getElementById("status");
 const resetButton = document.getElementById("reset");
@@ -10,6 +9,11 @@ const scoreDrawElement = document.getElementById("score-draw");
 const moveCountElement = document.getElementById("move-count");
 const streakLabelElement = document.getElementById("streak-label");
 const roundLabelElement = document.getElementById("round-label");
+const playerXLabel = document.getElementById("label-x");
+const playerOLabel = document.getElementById("label-o");
+const winLineElement = document.getElementById("win-line");
+const winLinePath = document.getElementById("win-line-path");
+const modeButtons = document.querySelectorAll("[data-mode]");
 
 const winningLines = [
   [0, 1, 2],
@@ -25,6 +29,9 @@ const winningLines = [
 let boardState = Array(9).fill("");
 let currentPlayer = "X";
 let gameOver = false;
+let aiThinking = false;
+let gameMode = "pvp";
+let aiTimer = null;
 let winningCells = [];
 let lastMoveIndex = null;
 let roundNumber = 1;
@@ -38,23 +45,23 @@ let streak = {
   count: 0
 };
 let introAnimationTimer = null;
-const INTRO_MAX_DELAY = 620;
+const INTRO_CELL_DELAY = 22;
 
 function createBoard() {
-  boardElement.innerHTML = "";
+  boardElement.querySelectorAll(".cell").forEach(cell => cell.remove());
 
   boardState.forEach((value, index) => {
     const button = document.createElement("button");
     button.className = "cell";
     button.type = "button";
     button.dataset.index = index;
-    button.disabled = Boolean(value) || gameOver;
+    button.disabled = Boolean(value) || gameOver || aiThinking;
     button.dataset.value = value;
 
     applyCellState(button, value, index, false);
 
     button.addEventListener("click", handleMove);
-    boardElement.appendChild(button);
+    boardElement.insertBefore(button, winLineElement);
   });
 
   updateActivePlayerCard();
@@ -69,7 +76,7 @@ function updateBoard() {
     const previousValue = button.dataset.value || "";
     const shouldAnimateMark = !previousValue && Boolean(value);
 
-    button.disabled = Boolean(value) || gameOver;
+    button.disabled = Boolean(value) || gameOver || aiThinking;
     button.dataset.value = value;
     applyCellState(button, value, index, shouldAnimateMark);
   });
@@ -117,7 +124,7 @@ function createMark(value) {
 
   mark.innerHTML = [
     '<svg viewBox="0 0 100 100" aria-hidden="true" focusable="false">',
-    '<circle cx="50" cy="50" r="32" pathLength="100"></circle>',
+    '<path d="M50 18a32 32 0 1 1-.01 0" pathLength="100"></path>',
     "</svg>"
   ].join("");
   return mark;
@@ -126,9 +133,15 @@ function createMark(value) {
 function handleMove(event) {
   const index = Number(event.currentTarget.dataset.index);
 
-  if (boardState[index] || gameOver) {
+  if (boardState[index] || gameOver || aiThinking || (gameMode !== "pvp" && currentPlayer === "O")) {
     return;
   }
+
+  playMove(index);
+}
+
+function playMove(index) {
+  if (boardState[index] || gameOver) return;
 
   boardState[index] = currentPlayer;
   lastMoveIndex = index;
@@ -139,7 +152,8 @@ function handleMove(event) {
     winningCells = winner.line;
     scores[winner.player] += 1;
     updateStreak(winner.player);
-    statusElement.textContent = `Player ${winner.player} wins`;
+    statusElement.textContent = gameMode === "pvp" ? `Player ${winner.player} wins` : winner.player === "X" ? "You win" : "Computer wins";
+    showWinningLine(winner.line);
   } else if (boardState.every(Boolean)) {
     gameOver = true;
     scores.draw += 1;
@@ -148,17 +162,28 @@ function handleMove(event) {
     statusElement.textContent = "Draw game";
   } else {
     currentPlayer = currentPlayer === "X" ? "O" : "X";
-    statusElement.textContent = `Player ${currentPlayer}'s turn`;
+    if (gameMode === "pvp") {
+      statusElement.textContent = `Player ${currentPlayer}'s turn`;
+    } else if (currentPlayer === "O") {
+      aiThinking = true;
+      statusElement.textContent = "Computer is thinking";
+    } else {
+      statusElement.textContent = "Your turn";
+    }
   }
 
   updateBoard();
+
+  if (aiThinking && !gameOver) {
+    aiTimer = window.setTimeout(playComputerMove, 320);
+  }
 }
 
-function getWinner() {
+function getWinner(state = boardState) {
   for (const [a, b, c] of winningLines) {
-    if (boardState[a] && boardState[a] === boardState[b] && boardState[a] === boardState[c]) {
+    if (state[a] && state[a] === state[b] && state[a] === state[c]) {
       return {
-        player: boardState[a],
+        player: state[a],
         line: [a, b, c]
       };
     }
@@ -170,6 +195,8 @@ function getWinner() {
 function updateActivePlayerCard() {
   playerXCard.classList.toggle("is-active", !gameOver && currentPlayer === "X");
   playerOCard.classList.toggle("is-active", !gameOver && currentPlayer === "O");
+  playerXLabel.textContent = gameMode === "pvp" ? "Player X" : "You";
+  playerOLabel.textContent = gameMode === "pvp" ? "Player O" : "Computer";
 }
 
 function updateHud() {
@@ -211,13 +238,16 @@ function updateStreak(player) {
 }
 
 function resetGame() {
+  window.clearTimeout(aiTimer);
   boardState = Array(9).fill("");
   currentPlayer = "X";
   gameOver = false;
+  aiThinking = false;
   winningCells = [];
   lastMoveIndex = null;
   roundNumber += 1;
-  statusElement.textContent = "Player X's turn";
+  statusElement.textContent = gameMode === "pvp" ? "Player X's turn" : "Your turn";
+  hideWinningLine();
   updateBoard();
   triggerIntroAnimation();
 }
@@ -228,46 +258,116 @@ function triggerIntroAnimation() {
     introAnimationTimer = null;
   }
 
-  applyIntroDelays();
-
-  gameElement.classList.remove("is-intro");
   boardElement.classList.remove("is-intro");
-
-  void gameElement.offsetWidth;
   void boardElement.offsetWidth;
-
-  gameElement.classList.add("is-intro");
   boardElement.classList.add("is-intro");
 
   introAnimationTimer = window.setTimeout(() => {
-    gameElement.classList.remove("is-intro");
     boardElement.classList.remove("is-intro");
     introAnimationTimer = null;
-  }, 1200);
+  }, 720);
 }
 
 function applyIntroDelays() {
-  const animatedElements = [
-    ...gameElement.querySelectorAll(".game-toolbar, .board, .cell, .scoreboard, .insights")
-  ];
-
-  const viewportWidth = Math.max(window.innerWidth, 1);
-  const viewportHeight = Math.max(window.innerHeight, 1);
-
-  animatedElements.forEach((element) => {
-    const rect = element.getBoundingClientRect();
-    const centerX = rect.left + rect.width / 2;
-    const centerY = rect.top + rect.height / 2;
-    const normalizedX = centerX / viewportWidth;
-    const normalizedY = centerY / viewportHeight;
-    const diagonalProgress = (normalizedX + normalizedY) / 2;
-    const delay = Math.round(diagonalProgress * INTRO_MAX_DELAY);
-
-    element.style.setProperty("--intro-delay", `${delay}ms`);
+  boardElement.querySelectorAll(".cell").forEach((element, index) => {
+    element.style.setProperty("--intro-delay", `${index * INTRO_CELL_DELAY}ms`);
   });
 }
 
+function openCells(state = boardState) {
+  return state.map((value, index) => value ? -1 : index).filter(index => index !== -1);
+}
+
+function findTacticalMove(player) {
+  return openCells().find(index => {
+    const test = [...boardState];
+    test[index] = player;
+    return getWinner(test)?.player === player;
+  });
+}
+
+function minimax(state, maximizing) {
+  const winner = getWinner(state);
+  if (winner?.player === "O") return 10;
+  if (winner?.player === "X") return -10;
+  const choices = openCells(state);
+  if (!choices.length) return 0;
+
+  const scoresForMoves = choices.map(index => {
+    const next = [...state];
+    next[index] = maximizing ? "O" : "X";
+    return minimax(next, !maximizing);
+  });
+  return maximizing ? Math.max(...scoresForMoves) : Math.min(...scoresForMoves);
+}
+
+function chooseComputerMove() {
+  const choices = openCells();
+  if (gameMode === "easy") return choices[Math.floor(Math.random() * choices.length)];
+
+  const winningMove = findTacticalMove("O");
+  const blockingMove = findTacticalMove("X");
+  if (winningMove !== undefined) return winningMove;
+  if (blockingMove !== undefined) return blockingMove;
+
+  if (gameMode === "medium") {
+    if (!boardState[4]) return 4;
+    return choices[Math.floor(Math.random() * choices.length)];
+  }
+
+  let bestScore = -Infinity;
+  let bestMove = choices[0];
+  choices.forEach(index => {
+    const next = [...boardState];
+    next[index] = "O";
+    const score = minimax(next, false);
+    if (score > bestScore) {
+      bestScore = score;
+      bestMove = index;
+    }
+  });
+  return bestMove;
+}
+
+function playComputerMove() {
+  aiThinking = false;
+  const move = chooseComputerMove();
+  if (move !== undefined) playMove(move);
+}
+
+function showWinningLine(line) {
+  const points = [16.667, 50, 83.333];
+  const start = { x: points[line[0] % 3], y: points[Math.floor(line[0] / 3)] };
+  const end = { x: points[line[2] % 3], y: points[Math.floor(line[2] / 3)] };
+  winLinePath.setAttribute("x1", start.x);
+  winLinePath.setAttribute("y1", start.y);
+  winLinePath.setAttribute("x2", end.x);
+  winLinePath.setAttribute("y2", end.y);
+  winLineElement.classList.remove("is-visible");
+  void winLineElement.getBoundingClientRect();
+  winLineElement.classList.add("is-visible");
+}
+
+function hideWinningLine() {
+  winLineElement.classList.remove("is-visible");
+}
+
+function changeMode(mode) {
+  if (mode === gameMode) return;
+  gameMode = mode;
+  modeButtons.forEach(button => {
+    const selected = button.dataset.mode === mode;
+    button.classList.toggle("is-selected", selected);
+    button.setAttribute("aria-checked", String(selected));
+  });
+  scores = { X: 0, O: 0, draw: 0 };
+  streak = { player: "", count: 0 };
+  roundNumber = 0;
+  resetGame();
+}
+
 resetButton.addEventListener("click", resetGame);
-window.addEventListener("resize", applyIntroDelays);
+modeButtons.forEach(button => button.addEventListener("click", () => changeMode(button.dataset.mode)));
 createBoard();
+applyIntroDelays();
 triggerIntroAnimation();

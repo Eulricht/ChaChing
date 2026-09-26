@@ -47,7 +47,7 @@
   place-items: center;
   border-radius: 12px;
   color: #c7bbd3;
-  background: rgba(18, 18, 22, .54);
+  background: rgba(15, 15, 19, .54);
   backdrop-filter: blur(1px);
   opacity: 1;
   transition: opacity 150ms ease;
