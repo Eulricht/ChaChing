@@ -5,6 +5,7 @@ const viewport = document.getElementById('word-window');
 const stage = document.getElementById('typing-stage');
 const caretElement = document.getElementById('typing-caret');
 const status = document.getElementById('typing-status');
+const restartButton = document.getElementById('restart');
 let duration = 30;
 let target = '';
 let characters = [];
@@ -243,7 +244,7 @@ document.addEventListener('click', event => {
 });
 input.addEventListener('focus', () => stage.classList.add('is-focused'));
 input.addEventListener('blur', () => stage.classList.remove('is-focused'));
-document.getElementById('restart').addEventListener('click', () => reset(true));
+restartButton.addEventListener('click', () => reset(true));
 document.querySelectorAll('[data-seconds]').forEach(button => {
   button.addEventListener('click', () => {
     duration = Number(button.dataset.seconds);
@@ -252,6 +253,11 @@ document.querySelectorAll('[data-seconds]').forEach(button => {
   });
 });
 document.addEventListener('keydown', event => {
+  if (event.key === 'Tab' && !event.ctrlKey && !event.metaKey && !event.altKey) {
+    event.preventDefault();
+    restartButton.focus({ preventScroll: true });
+    return;
+  }
   if (document.activeElement === input || finished || event.ctrlKey || event.metaKey || event.altKey) return;
   if (event.key.length !== 1 && event.key !== 'Backspace') return;
 
