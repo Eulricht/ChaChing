@@ -41,11 +41,11 @@ function buildTarget(wordCount = 250) {
 function metrics(elapsed) {
   const correct = [...input.value].reduce((total, char, index) => total + Number(char === target[index]), 0);
   const incorrect = input.value.length - correct;
-  const minutes = elapsed / 60;
+  const minutes = Math.max(elapsed, 1) / 60;
   return {
     wpm: elapsed > 0 ? Math.round(correct / 5 / minutes) : 0,
     raw: elapsed > 0 ? Math.round(input.value.length / 5 / minutes) : 0,
-    accuracy: attempts ? Math.round(correctAttempts / attempts * 100) : 100,
+    accuracy: attempts ? Math.round(correctAttempts / attempts * 100) : 0,
     correct,
     incorrect
   };
