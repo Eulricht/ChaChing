@@ -45,8 +45,8 @@ let streak = {
   count: 0
 };
 let introAnimationTimer = null;
-const INTRO_CELL_DELAY = 95;
-const INTRO_DURATION = 720;
+const INTRO_CELL_DELAY = 110;
+const INTRO_DURATION = 950;
 
 function createBoard() {
   boardElement.querySelectorAll(".cell").forEach(cell => cell.remove());
@@ -352,9 +352,17 @@ function playComputerMove() {
 }
 
 function showWinningLine(line) {
-  const points = [16.667, 50, 83.333];
-  const start = { x: points[line[0] % 3], y: points[Math.floor(line[0] / 3)] };
-  const end = { x: points[line[2] % 3], y: points[Math.floor(line[2] / 3)] };
+  const boardRect = boardElement.getBoundingClientRect();
+  const cells = boardElement.querySelectorAll(".cell");
+  const centerOf = index => {
+    const rect = cells[index].getBoundingClientRect();
+    return {
+      x: (rect.left + rect.width / 2 - boardRect.left) / boardRect.width * 100,
+      y: (rect.top + rect.height / 2 - boardRect.top) / boardRect.height * 100
+    };
+  };
+  const start = centerOf(line[0]);
+  const end = centerOf(line[2]);
   winLinePath.setAttribute("x1", start.x);
   winLinePath.setAttribute("y1", start.y);
   winLinePath.setAttribute("x2", end.x);
