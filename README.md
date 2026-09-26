@@ -1,20 +1,19 @@
 # Project Hub
 
-Static project collection hosted on GitHub Pages. Open `index.html` locally;
-there is no build step.
+Static project collection hosted on GitHub Pages. Run `preview.cmd` for the
+local preview; there is no build step.
 
 ## Shared UI
 
-Every project uses `dashboard.css` for the navigation and `theme.css` for shared
-colors, surfaces, and focus states. Load `theme.css` after the layout styles.
-Use the `project-page` body class and the same `site-nav` home link as
-`typing.html`. Project-specific styles should use the `--hub-*` variables
-instead of adding another palette. Keep links relative for GitHub Pages.
+The homepage is a single-page shell. It loads each project in an isolated frame,
+so switching projects does not change the browser URL. Shared navigation and
+colors live in `dashboard.css` and `theme.css`; project-specific code stays in
+its own folder under `projects/`.
 
 ## Projects
 
-- `tic-tac-toe.html`: two-player game; `styles.css` and `script.js`.
-- `typing.html`: timed typing tests; `typing.css` and `typing.js`.
+- `projects/tic-tac-toe/`: two-player game with isolated HTML, CSS, and JavaScript.
+- `projects/typing/`: timed typing test with isolated HTML, CSS, and JavaScript.
 
 Typing speed is correct characters divided by five, per elapsed minute.
 Accuracy measures correct inserted characters out of all inserted characters,

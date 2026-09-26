@@ -4,35 +4,41 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Project Hub</title>
-  <link rel="stylesheet" href="dashboard.css?v=20260926-1">
-  <link rel="stylesheet" href="theme.css?v=20260926-2">
+  <link rel="stylesheet" href="dashboard.css?v=20260926-2">
+  <link rel="stylesheet" href="theme.css?v=20260926-3">
   <script src="transitions.js?v=20260926-1" defer></script>
+  <script src="shell.js?v=20260926-1" defer></script>
 </head>
 <body class="dashboard-page page-transition">
-  <nav class="site-nav" aria-label="Main navigation">
-    <a class="hub-link" href="index.html" aria-current="page">
-      <svg class="home-icon" viewBox="0 0 24 24" aria-hidden="true">
-        <path d="M4 10.5 12 4l8 6.5v8a1.5 1.5 0 0 1-1.5 1.5h-13A1.5 1.5 0 0 1 4 18.5v-8Z"></path>
-        <path d="M9.5 20v-6h5v6"></path>
-      </svg>
-      Home
-    </a>
-  </nav>
-  <main class="dashboard">
-    <section aria-label="Projects">
-      <div class="project-grid">
-        <a class="project-card" href="tic-tac-toe.html">
-          <div class="project-symbol" aria-hidden="true">X <span>O</span></div>
-          <h3>Tic Tac Toe</h3>
-          <p>A classic for two players.</p>
-        </a>
-        <a class="project-card" href="typing.html">
-          <span class="project-symbol typing-symbol" aria-hidden="true"><span class="accent-letter">A</span>a<span>_</span></span>
-          <span class="project-title">Typing Game</span>
-          <span class="project-description">Find your rhythm. Test your speed.</span>
-        </a>
-      </div>
-    </section>
-  </main>
+  <div class="app-view is-active" id="dashboard-view">
+    <nav class="site-nav" aria-label="Main navigation">
+      <button class="hub-link" type="button" aria-current="page">
+        <svg class="home-icon" viewBox="0 0 24 24" aria-hidden="true">
+          <path d="M4 10.5 12 4l8 6.5v8a1.5 1.5 0 0 1-1.5 1.5h-13A1.5 1.5 0 0 1 4 18.5v-8Z"></path>
+          <path d="M9.5 20v-6h5v6"></path>
+        </svg>
+        Home
+      </button>
+    </nav>
+    <main class="dashboard">
+      <section aria-label="Projects">
+        <div class="project-grid">
+          <button class="project-card" type="button" data-project="tic-tac-toe">
+            <div class="project-symbol" aria-hidden="true">X <span>O</span></div>
+            <h3>Tic Tac Toe</h3>
+            <p>A classic for two players.</p>
+          </button>
+          <button class="project-card" type="button" data-project="typing">
+            <span class="project-symbol typing-symbol" aria-hidden="true"><span class="accent-letter">A</span>a<span>_</span></span>
+            <span class="project-title">Typing Game</span>
+            <span class="project-description">Find your rhythm. Test your speed.</span>
+          </button>
+        </div>
+      </section>
+    </main>
+  </div>
+  <section class="project-frame-view app-view" id="project-view" aria-label="Current project" hidden>
+    <iframe class="project-frame" id="project-frame" title="Project"></iframe>
+  </section>
 </body>
 </html>

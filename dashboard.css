@@ -27,7 +27,7 @@
   border-bottom: 0;
   font-size: 15px;
 }
-.hub-link { display: inline-flex; align-items: center; gap: 12px; min-height: 48px; padding: 0 15px; border: 1px solid var(--hub-line); border-radius: 9px; color: var(--hub-text); background: var(--hub-surface, #201a28); text-decoration: none; font-weight: 600; transition: color 160ms ease, background-color 160ms ease, border-color 160ms ease; }
+.hub-link { display: inline-flex; align-items: center; gap: 12px; min-height: 48px; padding: 0 15px; border: 1px solid var(--hub-line); border-radius: 9px; color: var(--hub-text); background: var(--hub-surface, #201a28); text-decoration: none; font: inherit; font-weight: 600; cursor: var(--ui-cursor, pointer); transition: color 160ms ease, background-color 160ms ease, border-color 160ms ease; }
 .hub-link:hover { color: #fff; background: var(--hub-hover, #272030); border-color: var(--hub-accent); }
 .hub-link > span { color: var(--hub-accent); }
 .home-icon { width: 21px; height: 21px; fill: none; stroke: var(--hub-accent); stroke-width: 1.6; stroke-linecap: round; stroke-linejoin: round; }
@@ -57,9 +57,9 @@
   text-decoration: none;
   font: inherit;
 }
-a.project-card { transition: border-color 140ms ease, background-color 140ms ease; }
-a.project-card:hover { border-color: #8d70b3; background: #272030; }
-a.project-card:focus-visible, .hub-link:focus-visible { outline: 2px solid var(--hub-accent); outline-offset: 4px; }
+.project-card { cursor: var(--ui-cursor, pointer); transition: border-color 140ms ease, background-color 140ms ease; }
+.project-card:hover { border-color: #8d70b3; background: #272030; }
+.project-card:focus-visible, .hub-link:focus-visible { outline: 2px solid var(--hub-accent); outline-offset: 4px; }
 .project-meta { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 8px; color: var(--hub-muted); font-size: 10px; }
 .project-badge { color: var(--hub-muted); }
 a .project-badge { color: var(--hub-accent); }
@@ -72,6 +72,14 @@ a .project-badge { color: var(--hub-accent); }
 .typing-symbol { color: var(--hub-muted); }
 .typing-symbol .accent-letter { color: var(--hub-accent); }
 .dashboard-footer { margin-top: 36px; color: var(--hub-muted); font-size: 11px; }
+
+.app-view { opacity: 1; transform: translateY(0); transition: opacity 220ms ease, transform 220ms ease; }
+.app-view.is-entering { opacity: 0; transform: translateY(16px); }
+.app-view.is-leaving { opacity: 0; transform: translateY(-16px); pointer-events: none; }
+.app-view[hidden] { display: none; }
+.project-frame-view { position: fixed; inset: 0; z-index: 20; background: var(--hub-bg); }
+.project-frame { display: block; width: 100%; height: 100%; border: 0; background: var(--hub-bg); }
+body.project-open { overflow: hidden; }
 
 .project-page .shell { min-height: calc(100vh - 80px); }
 .project-page .game { --accent: var(--hub-accent); --accent-strong: #ad86e0; }
@@ -87,5 +95,5 @@ a .project-badge { color: var(--hub-accent); }
   .project-grid { grid-template-columns: 1fr; }
 }
 @media (prefers-reduced-motion: reduce) {
-  a.project-card { transition: none; }
+  .project-card, .app-view { transition: none; }
 }
