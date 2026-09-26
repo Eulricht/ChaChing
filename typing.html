@@ -4,9 +4,9 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Typing / Project Hub</title>
-  <link rel="stylesheet" href="dashboard.css?v=20260924-4">
+  <link rel="stylesheet" href="dashboard.css?v=20260926-1">
   <link rel="stylesheet" href="theme.css?v=20260926-1">
-  <link rel="stylesheet" href="typing.css?v=20260926-4">
+  <link rel="stylesheet" href="typing.css?v=20260926-5">
   <script src="typing.js?v=20260926-3" defer></script>
 </head>
 <body class="project-page">
@@ -28,13 +28,13 @@
         <button id="restart" type="button" aria-label="Restart typing test" aria-keyshortcuts="Tab Enter">Restart &crarr;</button>
       </div>
     </div>
+    <div class="restart-hint" aria-hidden="true"><kbd>Tab</kbd><span>+</span><kbd>Enter</kbd><span>to Restart</span></div>
     <div class="typing-stats" aria-label="Test statistics">
       <span><strong id="time">30</strong> Seconds</span>
       <span><strong id="wpm">0</strong> WPM</span>
       <span><strong id="accuracy">100</strong>% Accuracy</span>
     </div>
     <div class="typing-stage" id="typing-stage">
-      <div class="restart-hint" aria-hidden="true"><kbd>Tab</kbd><span>+</span><kbd>Enter</kbd><span>to Restart</span></div>
       <div class="word-window" id="word-window">
         <div id="words" aria-label="Text to type"></div>
         <span class="typing-caret" id="typing-caret" aria-hidden="true"></span>
