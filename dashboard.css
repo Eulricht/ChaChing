@@ -77,15 +77,20 @@ a .project-badge { color: var(--hub-accent); }
 .app-view.is-entering { opacity: 0; transform: translateY(16px); }
 .app-view.is-leaving { opacity: 0; transform: translateY(-16px); pointer-events: none; }
 .app-view[hidden] { display: none; }
+.shell-nav { position: fixed; inset: 0 0 auto; z-index: 30; pointer-events: none; }
+.shell-nav .hub-link { pointer-events: auto; }
+#dashboard-view { padding-top: 80px; }
 .project-frame-view { position: fixed; inset: 0; z-index: 20; background: var(--hub-bg); }
 .project-frame { display: block; width: 100%; height: 100%; border: 0; background: var(--hub-bg); }
 body.project-open { overflow: hidden; }
+.project-page.is-embedded .site-nav { visibility: hidden; }
 
 .project-page .shell { min-height: calc(100vh - 80px); }
 .project-page .game { --accent: var(--hub-accent); --accent-strong: #ad86e0; }
 
 @media (max-width: 600px) {
   .site-nav { min-height: 68px; padding: 10px 20px; }
+  #dashboard-view { padding-top: 68px; }
   .dashboard { width: calc(100% - 40px); padding-top: 28px; }
   .project-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px; }
   .project-card { min-height: 260px; padding: 20px; }

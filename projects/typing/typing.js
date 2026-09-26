@@ -259,6 +259,8 @@ document.addEventListener('click', event => {
 });
 input.addEventListener('focus', () => stage.classList.add('is-focused'));
 input.addEventListener('blur', () => stage.classList.remove('is-focused'));
+restartButton.addEventListener('focus', () => stage.classList.add('is-restarting'));
+restartButton.addEventListener('blur', () => stage.classList.remove('is-restarting'));
 restartButton.addEventListener('click', () => reset(true));
 document.querySelectorAll('[data-seconds]').forEach(button => {
   button.addEventListener('click', () => {

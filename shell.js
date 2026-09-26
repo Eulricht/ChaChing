@@ -1,6 +1,7 @@
 const dashboardView = document.getElementById('dashboard-view');
 const projectView = document.getElementById('project-view');
 const projectFrame = document.getElementById('project-frame');
+const shellHome = document.getElementById('shell-home');
 const shellMotion = window.matchMedia('(prefers-reduced-motion: reduce)');
 const projects = {
   'tic-tac-toe': { path: 'projects/tic-tac-toe/index.html', title: 'Tic Tac Toe' },
@@ -36,6 +37,7 @@ async function openProject(projectName) {
   dashboardView.hidden = true;
   dashboardView.classList.remove('is-leaving');
   document.body.classList.add('project-open');
+  shellHome.removeAttribute('aria-current');
   document.title = `${project.title} / Project Hub`;
   projectFrame.title = project.title;
   enterView(projectView);
@@ -51,6 +53,7 @@ async function showDashboard() {
   projectView.hidden = true;
   projectView.classList.remove('is-leaving');
   document.body.classList.remove('project-open');
+  shellHome.setAttribute('aria-current', 'page');
   document.title = 'Project Hub';
   enterView(dashboardView);
   await waitForTransition();
@@ -61,6 +64,8 @@ async function showDashboard() {
 document.querySelectorAll('[data-project]').forEach(button => {
   button.addEventListener('click', () => openProject(button.dataset.project));
 });
+
+shellHome.addEventListener('click', showDashboard);
 
 window.addEventListener('message', event => {
   if (event.origin === window.location.origin && event.data?.type === 'project-home') showDashboard();
