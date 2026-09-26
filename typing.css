@@ -1,10 +1,9 @@
 .typing-main {
   width: min(100% - 80px, 1280px);
   margin: 30px auto 48px;
-  transition: margin 220ms ease;
 }
 
-.typing-toolbar { display: flex; align-items: center; justify-content: flex-end; gap: 20px; max-height: 64px; padding-bottom: 10px; color: var(--hub-muted); font: 14px Consolas, monospace; opacity: 1; overflow: hidden; transition: opacity 160ms linear, max-height 220ms ease, padding 220ms ease; }
+.typing-toolbar { display: flex; align-items: center; justify-content: flex-end; gap: 20px; padding-bottom: 10px; color: var(--hub-muted); font: 14px Consolas, monospace; opacity: 1; transition: opacity 240ms ease; }
 .durations { display: flex; align-items: center; gap: 4px; }
 .typing-main button { min-height: 44px; padding: 10px 13px; border: 1px solid transparent; border-radius: 7px; color: var(--hub-muted); background: transparent; font: inherit; cursor: var(--ui-cursor); }
 .typing-main button:hover, .typing-main button[aria-pressed="true"] { color: var(--hub-accent); background: var(--hub-hover); }
@@ -39,8 +38,8 @@
   place-items: center;
   border-radius: 12px;
   color: #c7bbd3;
-  background: rgba(12, 12, 15, .76);
-  backdrop-filter: blur(2px);
+  background: rgba(12, 12, 15, .48);
+  backdrop-filter: blur(.75px);
   opacity: 1;
   transition: opacity 150ms ease;
   pointer-events: none;
@@ -52,10 +51,9 @@
 .typing-capture { position: fixed; width: 1px; height: 1px; left: 0; bottom: 0; padding: 0; border: 0; opacity: 0; overflow: hidden; clip: rect(0, 0, 0, 0); clip-path: inset(50%); }
 .sr-only { position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip: rect(0, 0, 0, 0); white-space: nowrap; border: 0; }
 
-.project-page .site-nav { max-height: 84px; opacity: 1; overflow: hidden; transition: opacity 160ms linear, min-height 220ms ease, max-height 220ms ease, padding 220ms ease; }
-.project-page.test-running .site-nav { min-height: 0; max-height: 0; padding-top: 0; padding-bottom: 0; opacity: 0; pointer-events: none; }
-.test-running .typing-main { margin-top: 22px; }
-.test-running .typing-toolbar { max-height: 0; padding-bottom: 0; opacity: 0; pointer-events: none; }
+.project-page .site-nav { opacity: 1; transition: opacity 240ms ease; }
+.project-page.test-running .site-nav,
+.test-running .typing-toolbar { opacity: 0; pointer-events: none; }
 
 .results { display: grid; grid-template-columns: 124px minmax(0, 1fr); gap: 20px 32px; margin-top: 34px; padding-top: 26px; border-top: 1px solid var(--hub-line); color: var(--hub-muted); font: 14px Consolas, monospace; opacity: 0; transform: translateY(10px); transition: opacity 260ms linear, transform 260ms ease; }
 .results[hidden] { display: none; }
