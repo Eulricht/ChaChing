@@ -6,7 +6,7 @@
   <title>Typing / Project Hub</title>
   <link rel="stylesheet" href="dashboard.css?v=20260926-1">
   <link rel="stylesheet" href="theme.css?v=20260926-1">
-  <link rel="stylesheet" href="typing.css?v=20260926-5">
+  <link rel="stylesheet" href="typing.css?v=20260926-6">
   <script src="typing.js?v=20260926-3" defer></script>
 </head>
 <body class="project-page">
@@ -25,10 +25,14 @@
         <button type="button" data-seconds="15" aria-pressed="false">15s</button>
         <button type="button" data-seconds="30" aria-pressed="true">30s</button>
         <button type="button" data-seconds="60" aria-pressed="false">60s</button>
-        <button id="restart" type="button" aria-label="Restart typing test" aria-keyshortcuts="Tab Enter">Restart &crarr;</button>
       </div>
     </div>
-    <div class="restart-hint" aria-hidden="true"><kbd>Tab</kbd><span>+</span><kbd>Enter</kbd><span>to Restart</span></div>
+    <div class="restart-guide">
+      <button class="restart-icon" id="restart" type="button" aria-label="Restart typing test" aria-keyshortcuts="Tab Enter">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M20 11a8 8 0 1 0-2.35 5.65"></path><path d="M20 4v7h-7"></path></svg>
+      </button>
+      <div class="restart-hint" aria-hidden="true"><kbd>Tab</kbd><span>+</span><kbd>Enter</kbd><span>to Restart</span></div>
+    </div>
     <div class="typing-stats" aria-label="Test statistics">
       <span><strong id="time">30</strong> Seconds</span>
       <span><strong id="wpm">0</strong> WPM</span>
