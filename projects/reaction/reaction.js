@@ -14,6 +14,7 @@ const SVG_NS = "http://www.w3.org/2000/svg";
 let state = "idle";
 let readyAt = 0;
 let signalTimer = null;
+let signalFrame = null;
 let results = [];
 let falseStarts = 0;
 
@@ -31,13 +32,21 @@ function setStageState(nextState, prompt, instruction) {
 }
 
 function startAttempt() {
-  window.clearTimeout(signalTimer);
+  cancelSignal();
   const delay = WAIT_MIN_MS + Math.random() * (WAIT_MAX_MS - WAIT_MIN_MS);
   setStageState("waiting", "Wait for it", "React only when the screen turns purple.");
   signalTimer = window.setTimeout(() => {
-    readyAt = performance.now();
-    setStageState("ready", "Click now", "Go.");
+    // Change the signal at a frame boundary, rather than between screen updates.
+    signalFrame = requestAnimationFrame(() => {
+      setStageState("ready", "Click now", "Go.");
+      readyAt = performance.now();
+    });
   }, delay);
+}
+
+function cancelSignal() {
+  window.clearTimeout(signalTimer);
+  cancelAnimationFrame(signalFrame);
 }
 
 function renderHistory() {
@@ -59,7 +68,7 @@ function renderHistory() {
   const minimum = Math.min(...recent);
   const maximum = Math.max(...recent);
   // Round the adaptive scale so the chart stays readable as results change.
-  const minY = Math.max(50, Math.floor((minimum - 40) / 50) * 50);
+  const minY = Math.max(0, Math.floor((minimum - 40) / 50) * 50);
   const maxY = Math.max(minY + 100, Math.ceil((maximum + 40) / 50) * 50);
   const plotWidth = width - plot.left - plot.right;
   const plotHeight = height - plot.top - plot.bottom;
@@ -134,18 +143,18 @@ function renderStats() {
   renderHistory();
 }
 
-function finishAttempt() {
-  const elapsed = Math.max(1, Math.round(performance.now() - readyAt));
+function finishAttempt(inputAt) {
+  const elapsed = Math.max(1, Math.round(inputAt - readyAt));
   results.push(elapsed);
   setStageState("result", `${elapsed} ms`, "Click or press Space to try again.");
   renderStats();
 }
 
-function activate() {
+function activate(inputAt = performance.now()) {
   stage.focus({ preventScroll: true });
 
-  if (state === "waiting") {
-    window.clearTimeout(signalTimer);
+  if (state === "waiting" || (state === "ready" && inputAt < readyAt)) {
+    cancelSignal();
     falseStarts += 1;
     setStageState("early", "Too soon", "The signal had not changed. Click to retry.");
     renderStats();
@@ -153,7 +162,7 @@ function activate() {
   }
 
   if (state === "ready") {
-    finishAttempt();
+    finishAttempt(inputAt);
     return;
   }
 
@@ -163,29 +172,37 @@ function activate() {
 stage.addEventListener("pointerdown", event => {
   if (event.button !== 0) return;
   event.preventDefault();
-  activate();
+  activate(event.timeStamp);
 });
 
 document.addEventListener("keydown", event => {
   if (event.key !== " " && event.key !== "Enter") return;
+  if (event.repeat) { event.preventDefault(); return; }
   if (event.target.closest("button, a")) return;
   event.preventDefault();
-  activate();
+  activate(event.timeStamp);
+});
+
+// Parent and iframe clocks have different origins; preserve the original input time.
+document.addEventListener("reaction-input", event => {
+  activate(event.detail.absoluteTime - performance.timeOrigin);
 });
 
 clearButton.addEventListener("click", () => {
-  window.clearTimeout(signalTimer);
+  cancelSignal();
   results = [];
   falseStarts = 0;
   setStageState("idle", "", "Wait for the screen to turn purple, then react.");
   renderStats();
 });
 
-document.addEventListener("visibilitychange", () => {
-  if (!document.hidden || state !== "waiting") return;
-  window.clearTimeout(signalTimer);
-  setStageState("idle", "Test paused", "Return focus, then click to begin again.");
-});
+function pauseAttempt() {
+  if (state !== "waiting" && state !== "ready") return;
+  cancelSignal();
+  setStageState("idle", "", "Test paused. Click or press Space to begin again.");
+}
+document.addEventListener("visibilitychange", () => { if (document.hidden) pauseAttempt(); });
+window.addEventListener("blur", pauseAttempt);
 
 setStageState("idle", "", "Wait for the screen to turn purple, then react.");
 renderStats();

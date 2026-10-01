@@ -8,7 +8,8 @@ const shellMotion = window.matchMedia('(prefers-reduced-motion: reduce)');
 const projects = {
   'tic-tac-toe': { path: 'projects/tic-tac-toe/index.html', title: 'Tic Tac Toe' },
   typing: { path: 'projects/typing/index.html', title: 'Typing Game' },
-  reaction: { path: 'projects/reaction/index.html', title: 'Reaction Time' }
+  reaction: { path: 'projects/reaction/index.html', title: 'Reaction Time' },
+  dice: { path: 'projects/dice/index.html', title: 'Dice Roller' }
 };
 // Keep this in sync with the CSS transition duration in dashboard.css.
 const VIEW_TRANSITION_MS = 220;
@@ -89,8 +90,15 @@ document.addEventListener('keydown', event => {
     const stage = projectFrame.contentDocument?.getElementById('reaction-stage');
     if (!stage) return;
     event.preventDefault();
+    if (event.repeat) return;
     stage.focus({ preventScroll: true });
-    stage.dispatchEvent(new KeyboardEvent('keydown', { key: event.key, bubbles: true }));
+    stage.dispatchEvent(new CustomEvent('reaction-input', {
+      bubbles: true, detail: { absoluteTime: performance.timeOrigin + event.timeStamp }
+    }));
+  }
+  if (event.key === ' ' && activeProject === 'dice') {
+    event.preventDefault();
+    if (!event.repeat) projectFrame.contentDocument?.dispatchEvent(new Event('dice-roll'));
   }
 }, true);
 

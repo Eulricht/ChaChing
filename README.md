@@ -15,6 +15,12 @@ its own folder under `projects/`.
 - `projects/tic-tac-toe/`: two-player game with isolated HTML, CSS, and JavaScript.
 - `projects/typing/`: timed typing test with isolated HTML, CSS, and JavaScript.
 - `projects/reaction/`: reaction timer with session statistics and recent history.
+- `projects/dice/`: animated one-to-three dice roller with totals and recent rolls.
+
+Reaction timing starts at a render-frame boundary and uses the original input
+timestamp. Leaving focus cancels the attempt. Display and input-device latency
+still affect browser measurements. Dice use secure random bytes with rejection
+sampling for equal chances of each face. Animation does not choose the result.
 
 Typing speed is correct characters divided by five, per elapsed minute.
 Accuracy measures correct inserted characters out of all inserted characters,

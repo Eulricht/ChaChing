@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Swiss.exe</title>
+  <link rel="icon" href="../../assets/swiss-mark.svg?v=3" type="image/svg+xml">
+  <link rel="stylesheet" href="../../dashboard.css?v=20261001-4">
+  <link rel="stylesheet" href="../../theme.css?v=20261001-2">
+  <link rel="stylesheet" href="dice.css?v=1">
+  <script src="../../project-host.js" defer></script>
+  <script src="dice.js?v=1" defer></script>
+</head>
+<body class="project-page dice-page">
+  <nav class="site-nav" aria-label="Main navigation">
+    <button class="hub-link" type="button" data-project-home>
+      <svg class="home-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 10.5 12 4l8 6.5v8a1.5 1.5 0 0 1-1.5 1.5h-13A1.5 1.5 0 0 1 4 18.5v-8Z"/><path d="M9.5 20v-6h5v6"/></svg>Home
+    </button>
+  </nav>
+  <main class="dice-main">
+    <header class="dice-controls">
+      <span class="dice-label">Dice</span>
+      <div class="dice-count" role="group" aria-label="Number of dice">
+        <button type="button" data-count="1" aria-pressed="true">1</button>
+        <button type="button" data-count="2" aria-pressed="false">2</button>
+        <button type="button" data-count="3" aria-pressed="false">3</button>
+      </div>
+    </header>
+    <section class="dice-table" aria-label="Dice tray">
+      <div class="dice-row" id="dice-row"></div>
+      <div class="table-orbit" aria-hidden="true"></div>
+    </section>
+    <div class="roll-controls">
+      <button class="roll-button" id="roll" type="button"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M20 7v5h-5M4 17v-5h5M19.5 11a7.5 7.5 0 0 0-13-4M4.5 13a7.5 7.5 0 0 0 13 4"/></svg><span>Roll dice</span></button>
+      <span class="roll-hint"><kbd>Space</kbd> to roll</span>
+    </div>
+    <section class="dice-stats" aria-label="Roll statistics" aria-live="polite">
+      <div><span>Total</span><strong id="roll-total">0</strong></div>
+      <div><span>Rolled</span><strong id="roll-values">--</strong></div>
+      <div><span>Rolls</span><strong id="roll-count">0</strong></div>
+    </section>
+    <section class="dice-history" aria-label="Recent rolls">
+      <span class="dice-label">Recent rolls</span>
+      <ol id="roll-history"><li class="history-empty">Your next roll starts here.</li></ol>
+    </section>
+  </main>
+</body>
+</html>

@@ -43,6 +43,11 @@
 .knife-driver { fill: none; stroke: var(--hub-accent); stroke-width: 1.5; stroke-linejoin: round; transform-origin: 45px 41px; transform: rotate(-75deg); animation: knife-driver-open 1250ms cubic-bezier(.22, .7, .25, 1) both; }
 .knife-tool { fill: none; stroke: var(--hub-accent); stroke-width: 2; stroke-linejoin: round; transform-origin: 45px 41px; transform: rotate(-150deg); animation: knife-open 1100ms cubic-bezier(.22, .7, .25, 1) both; }
 .knife-handle { fill: var(--hub-accent); }
+.knife-awl, .knife-saw { fill: none; stroke: var(--hub-accent); stroke-width: 1.3; stroke-linejoin: round; transform-origin: 45px 41px; }
+.knife-awl { transform: rotate(-110deg); animation: knife-awl-open 1400ms cubic-bezier(.22, .7, .25, 1) both; }
+.knife-saw { transform: rotate(-35deg); animation: knife-saw-open 1500ms cubic-bezier(.22, .7, .25, 1) both; }
+@keyframes knife-awl-open { from { transform: rotate(0); } to { transform: rotate(-110deg); } }
+@keyframes knife-saw-open { from { transform: rotate(0); } to { transform: rotate(-35deg); } }
 .knife-pivot { fill: var(--hub-bg); }
 .knife-detail { stroke: var(--hub-bg); stroke-width: 1.5; stroke-linecap: round; }
 /* Opening duration above controls the pocket-knife flourish on page load. */
@@ -88,6 +93,8 @@ a .project-badge { color: var(--hub-accent); }
 .typing-symbol .accent-letter { color: var(--hub-accent); }
 .reaction-symbol { display: flex; align-items: baseline; gap: 5px; letter-spacing: -.08em; }
 .reaction-symbol small { color: var(--hub-accent); font-size: 17px; letter-spacing: 0; }
+.dice-symbol { width: 60px; height: 60px; fill: var(--hub-accent); }
+.dice-symbol rect { fill: none; stroke: var(--hub-accent); stroke-width: 2; }
 .dashboard-footer { margin-top: 36px; color: var(--hub-muted); font-size: 11px; }
 
 /* Keep 220ms aligned with VIEW_TRANSITION_MS in shell.js. */
@@ -123,5 +130,5 @@ body.project-open { overflow: hidden; }
 }
 @media (prefers-reduced-motion: reduce) {
   .project-card, .app-view { transition: none; }
-  .knife-tool, .knife-driver { animation: none; }
+  .knife-tool, .knife-driver, .knife-awl, .knife-saw { animation: none; }
 }
