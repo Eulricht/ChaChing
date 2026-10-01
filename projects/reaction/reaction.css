@@ -1,0 +1,93 @@
+/* Layout tuning: stage width, spacing, and signal size are controlled here. */
+.reaction-main {
+  width: min(100% - 72px, 1120px);
+  margin: 54px auto 72px;
+}
+
+.reaction-test { display: grid; gap: 28px; }
+.reaction-heading { display: flex; align-items: end; justify-content: space-between; gap: 24px; }
+.section-label { color: var(--hub-muted); font-size: 11px; letter-spacing: .09em; text-transform: uppercase; }
+.reaction-heading h1, .history-heading h2 { margin: 7px 0 0; color: var(--hub-text); font-family: "Segoe UI Variable Display", "Segoe UI", sans-serif; font-weight: 560; letter-spacing: -.035em; }
+.reaction-heading h1 { font-size: clamp(27px, 4vw, 38px); }
+.history-heading h2 { font-size: 19px; }
+.keyboard-hint { color: #77717e; font-size: 12px; }
+.keyboard-hint kbd { padding: 6px 9px; border: 1px solid var(--hub-line); border-radius: 6px; color: var(--hub-muted); background: var(--hub-surface); font: inherit; }
+
+.reaction-stage {
+  position: relative;
+  display: grid;
+  place-items: center;
+  align-content: center;
+  min-height: clamp(310px, 45vh, 470px);
+  padding: 40px;
+  overflow: hidden;
+  border: 1px solid var(--hub-line);
+  border-radius: 18px;
+  color: var(--hub-text);
+  background: var(--hub-surface);
+  text-align: center;
+  cursor: var(--ui-cursor);
+  user-select: none;
+  -webkit-user-select: none;
+  transition: border-color 180ms ease, transform 180ms ease;
+}
+.reaction-stage:hover { border-color: #4b4155; }
+.reaction-stage:active { transform: scale(.998); }
+.reaction-stage:focus-visible { outline: 2px solid var(--hub-accent); outline-offset: 5px; }
+.reaction-prompt { z-index: 1; margin-top: 22px; font: 500 clamp(28px, 5vw, 48px)/1.1 Consolas, monospace; letter-spacing: -.045em; }
+.reaction-stage p { z-index: 1; margin: 13px 0 0; color: var(--hub-muted); font-size: 13px; }
+
+.signal-mark { position: relative; width: 78px; height: 78px; border: 1px solid #45404b; border-radius: 50%; }
+.signal-mark::before, .signal-mark::after { content: ""; position: absolute; inset: 50% auto auto 50%; background: #6f6975; transform: translate(-50%, -50%); }
+.signal-mark::before { width: 28px; height: 2px; }
+.signal-mark::after { width: 2px; height: 28px; }
+.signal-mark span { position: absolute; inset: 9px; border: 1px solid #302d35; border-radius: 50%; }
+
+.reaction-stage.is-waiting .signal-mark { animation: wait-pulse 1.4s ease-in-out infinite; }
+.reaction-stage.is-ready { border-color: var(--hub-accent-strong); color: #17131d; background: var(--hub-accent-strong); }
+.reaction-stage.is-ready .signal-mark { border-color: rgba(23, 19, 29, .4); transform: scale(1.08); }
+.reaction-stage.is-ready .signal-mark::before, .reaction-stage.is-ready .signal-mark::after { background: #17131d; }
+.reaction-stage.is-ready .signal-mark span { border-color: rgba(23, 19, 29, .22); }
+.reaction-stage.is-ready p { color: rgba(23, 19, 29, .7); }
+.reaction-stage.is-early { border-color: #7e5361; background: #20171c; }
+.reaction-stage.is-result { border-color: #5b496d; }
+
+/* Metric columns can be added or removed without changing the game logic. */
+.reaction-stats { display: grid; grid-template-columns: repeat(6, minmax(0, 1fr)); gap: 22px; padding: 8px 2px; }
+.reaction-metric { display: grid; grid-template-columns: auto auto 1fr; align-items: baseline; gap: 4px; min-width: 0; }
+.reaction-metric span { grid-column: 1 / -1; margin-bottom: 4px; color: var(--hub-muted); font-size: 11px; }
+.reaction-metric strong { color: var(--hub-text); font-size: 27px; font-weight: 400; }
+.reaction-metric small { color: #77717e; font-size: 11px; }
+.reaction-metric.is-primary strong { color: var(--hub-accent-strong); }
+
+.history-panel { margin-top: 8px; padding-top: 26px; border-top: 1px solid #242229; }
+.history-heading { display: flex; align-items: end; justify-content: space-between; gap: 20px; }
+.clear-results { min-height: 38px; padding: 8px 10px; border: 1px solid transparent; border-radius: 7px; color: #77717e; background: transparent; font: 12px Consolas, monospace; }
+.clear-results:hover { color: var(--hub-text); border-color: var(--hub-line); background: var(--hub-surface); }
+.reaction-history { display: flex; align-items: end; gap: 12px; min-height: 154px; margin-top: 22px; padding: 0 4px; }
+.empty-history { align-self: center; margin: auto; color: #625d67; font-size: 12px; }
+.history-item { display: grid; grid-template-rows: 1fr auto; align-items: end; justify-items: center; gap: 8px; flex: 1; height: 140px; min-width: 0; }
+.history-bar { width: min(100%, 42px); min-height: 22px; border-radius: 6px 6px 2px 2px; background: #4b3a5d; transform-origin: bottom; animation: bar-enter 260ms ease both; }
+.history-item:last-child .history-bar { background: var(--hub-accent); }
+.history-value { color: #77717e; font-size: 10px; white-space: nowrap; }
+
+@keyframes wait-pulse { 50% { opacity: .45; transform: scale(.94); } }
+@keyframes bar-enter { from { opacity: 0; transform: scaleY(.2); } }
+
+@media (max-width: 760px) {
+  .reaction-main { width: calc(100% - 40px); margin-top: 34px; }
+  .reaction-heading { align-items: start; }
+  .keyboard-hint { display: none; }
+  .reaction-stage { min-height: 300px; padding: 28px 20px; }
+  .reaction-stats { grid-template-columns: repeat(3, minmax(0, 1fr)); row-gap: 24px; }
+}
+
+@media (max-width: 430px) {
+  .reaction-stats { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .reaction-history { gap: 7px; }
+  .history-value { font-size: 9px; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .reaction-stage, .signal-mark, .history-bar { animation: none; transition: none; }
+}

@@ -3,10 +3,11 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Project Hub</title>
-  <link rel="stylesheet" href="dashboard.css?v=20260926-4">
-  <link rel="stylesheet" href="theme.css?v=20260926-8">
-  <script src="shell.js?v=20260926-3" defer></script>
+  <title>Swiss.exe</title>
+  <link rel="icon" href="assets/swiss-mark.svg" type="image/svg+xml">
+  <link rel="stylesheet" href="dashboard.css?v=20261001-1">
+  <link rel="stylesheet" href="theme.css?v=20261001-1">
+  <script src="shell.js?v=20261001-1" defer></script>
 </head>
 <body class="dashboard-page">
   <nav class="site-nav shell-nav" aria-label="Main navigation">
@@ -20,6 +21,11 @@
   </nav>
   <div class="app-view is-active" id="dashboard-view">
     <main class="dashboard">
+      <header class="brand-lockup">
+        <img class="brand-mark" src="assets/swiss-mark.svg" alt="">
+        <h1>Swiss<span>.exe</span></h1>
+        <span class="brand-cursor" aria-hidden="true"></span>
+      </header>
       <section aria-label="Projects">
         <div class="project-grid">
           <button class="project-card" type="button" data-project="tic-tac-toe">
@@ -31,6 +37,11 @@
             <span class="project-symbol typing-symbol" aria-hidden="true"><span class="accent-letter">A</span>a<span>_</span></span>
             <span class="project-title">Typing Game</span>
             <span class="project-description">Find your rhythm. Test your speed.</span>
+          </button>
+          <button class="project-card" type="button" data-project="reaction">
+            <span class="project-symbol reaction-symbol" aria-hidden="true"><span>184</span><small>ms</small></span>
+            <span class="project-title">Reaction Time</span>
+            <span class="project-description">Wait for the signal. React instantly.</span>
           </button>
         </div>
       </section>

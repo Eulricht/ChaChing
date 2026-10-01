@@ -45,6 +45,7 @@ let streak = {
   count: 0
 };
 let introAnimationTimer = null;
+// Board entrance timing: delay controls the diagonal gap between cells.
 const INTRO_CELL_DELAY = 110;
 const INTRO_DURATION = 950;
 
@@ -331,12 +332,14 @@ function chooseComputerMove() {
   const blockingMove = findTacticalMove("X");
 
   if (gameMode === "easy") {
+    // Easy notices wins sometimes and blocks rarely, but still prefers useful cells.
     if (winningMove !== undefined && Math.random() < .6) return winningMove;
     if (blockingMove !== undefined && Math.random() < .18) return blockingMove;
     return sensibleMove(choices);
   }
 
   if (gameMode === "medium") {
+    // Medium mixes optimal play with fallible choices for a roughly balanced match.
     if (winningMove !== undefined) return winningMove;
     if (blockingMove !== undefined && Math.random() < .72) return blockingMove;
     return Math.random() < .5 ? randomChoice(optimalMoves(choices)) : sensibleMove(choices);

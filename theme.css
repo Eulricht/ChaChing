@@ -1,5 +1,6 @@
 :root {
   color-scheme: dark;
+  /* Global UI palette: adjust these values to retheme every project. */
   --hub-bg: #0f0f13;
   --hub-surface: #18181d;
   --hub-hover: #202027;

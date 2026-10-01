@@ -6,6 +6,7 @@ const host = "127.0.0.1";
 const port = Number(process.argv[2] || process.env.PORT || 8000);
 const root = path.resolve(__dirname);
 
+// Add MIME types here if a future project introduces another asset format.
 const contentTypes = {
   ".css": "text/css; charset=utf-8",
   ".html": "text/html; charset=utf-8",
@@ -52,6 +53,7 @@ const server = http.createServer((request, response) => {
       }
 
       response.writeHead(200, {
+        // Disable caching so local CSS and JavaScript edits appear on refresh.
         "Cache-Control": "no-store",
         "Content-Type": contentTypes[path.extname(filePath).toLowerCase()] || "application/octet-stream"
       });

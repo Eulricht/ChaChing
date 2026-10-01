@@ -3,15 +3,20 @@ const projectView = document.getElementById('project-view');
 const projectFrame = document.getElementById('project-frame');
 const shellHome = document.getElementById('shell-home');
 const shellMotion = window.matchMedia('(prefers-reduced-motion: reduce)');
+
+// Add future projects here; each path is loaded inside the shared shell.
 const projects = {
   'tic-tac-toe': { path: 'projects/tic-tac-toe/index.html', title: 'Tic Tac Toe' },
-  typing: { path: 'projects/typing/index.html', title: 'Typing Game' }
+  typing: { path: 'projects/typing/index.html', title: 'Typing Game' },
+  reaction: { path: 'projects/reaction/index.html', title: 'Reaction Time' }
 };
+// Keep this in sync with the CSS transition duration in dashboard.css.
+const VIEW_TRANSITION_MS = 220;
 let changingView = false;
 let activeProject = null;
 
 function waitForTransition() {
-  return new Promise(resolve => window.setTimeout(resolve, shellMotion.matches ? 0 : 220));
+  return new Promise(resolve => window.setTimeout(resolve, shellMotion.matches ? 0 : VIEW_TRANSITION_MS));
 }
 
 function loadProject(path) {
@@ -40,7 +45,6 @@ async function openProject(projectName) {
   document.body.classList.add('project-open');
   activeProject = projectName;
   shellHome.removeAttribute('aria-current');
-  document.title = `${project.title} / Project Hub`;
   projectFrame.title = project.title;
   enterView(projectView);
   await waitForTransition();
@@ -57,7 +61,6 @@ async function showDashboard() {
   document.body.classList.remove('project-open');
   activeProject = null;
   shellHome.setAttribute('aria-current', 'page');
-  document.title = 'Project Hub';
   enterView(dashboardView);
   await waitForTransition();
   projectFrame.src = 'about:blank';

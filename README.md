@@ -1,6 +1,6 @@
-# Project Hub
+# Swiss.exe
 
-Static project collection hosted on GitHub Pages. Run `preview.cmd` for the
+Personal collection of small games and utilities. Run `preview.cmd` for the
 local preview; there is no build step.
 
 ## Shared UI
@@ -14,6 +14,7 @@ its own folder under `projects/`.
 
 - `projects/tic-tac-toe/`: two-player game with isolated HTML, CSS, and JavaScript.
 - `projects/typing/`: timed typing test with isolated HTML, CSS, and JavaScript.
+- `projects/reaction/`: reaction timer with session statistics and recent history.
 
 Typing speed is correct characters divided by five, per elapsed minute.
 Accuracy measures correct inserted characters out of all inserted characters,

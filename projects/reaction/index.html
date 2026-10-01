@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Swiss.exe</title>
+  <link rel="icon" href="../../assets/swiss-mark.svg" type="image/svg+xml">
+  <link rel="stylesheet" href="../../dashboard.css?v=20261001-1">
+  <link rel="stylesheet" href="../../theme.css?v=20261001-1">
+  <link rel="stylesheet" href="reaction.css?v=20261001-1">
+  <script src="../../project-host.js?v=20261001-1" defer></script>
+  <script src="reaction.js?v=20261001-2" defer></script>
+</head>
+<body class="project-page reaction-page">
+  <nav class="site-nav" aria-label="Main navigation">
+    <button class="hub-link" type="button" data-project-home>
+      <svg class="home-icon" viewBox="0 0 24 24" aria-hidden="true">
+        <path d="M4 10.5 12 4l8 6.5v8a1.5 1.5 0 0 1-1.5 1.5h-13A1.5 1.5 0 0 1 4 18.5v-8Z"></path>
+        <path d="M9.5 20v-6h5v6"></path>
+      </svg>
+      Home
+    </button>
+  </nav>
+
+  <main class="reaction-main">
+    <section class="reaction-test" aria-labelledby="reaction-heading">
+      <header class="reaction-heading">
+        <div>
+          <span class="section-label">Response test</span>
+          <h1 id="reaction-heading">Reaction time</h1>
+        </div>
+        <span class="keyboard-hint"><kbd>Space</kbd> to react</span>
+      </header>
+
+      <div class="reaction-stage" id="reaction-stage" role="button" tabindex="0" aria-describedby="reaction-instruction">
+        <div class="signal-mark" aria-hidden="true"><span></span></div>
+        <strong class="reaction-prompt" id="reaction-prompt">Click to begin</strong>
+        <p id="reaction-instruction">Wait for the screen to turn purple, then react.</p>
+      </div>
+
+      <section class="reaction-stats" aria-label="Reaction statistics">
+        <div class="reaction-metric is-primary"><span>Latest</span><strong id="latest-result">--</strong><small>ms</small></div>
+        <div class="reaction-metric"><span>Best</span><strong id="best-result">--</strong><small>ms</small></div>
+        <div class="reaction-metric"><span>Average</span><strong id="average-result">--</strong><small>ms</small></div>
+        <div class="reaction-metric"><span>Median</span><strong id="median-result">--</strong><small>ms</small></div>
+        <div class="reaction-metric"><span>Attempts</span><strong id="attempt-count">0</strong></div>
+        <div class="reaction-metric"><span>False starts</span><strong id="false-start-count">0</strong></div>
+      </section>
+
+      <section class="history-panel" aria-labelledby="history-title">
+        <div class="history-heading">
+          <div><span class="section-label">Session</span><h2 id="history-title">Recent attempts</h2></div>
+          <button class="clear-results" id="clear-results" type="button">Clear data</button>
+        </div>
+        <div class="reaction-history" id="reaction-history" aria-label="No recorded attempts yet">
+          <p class="empty-history">Results will appear here.</p>
+        </div>
+      </section>
+    </section>
+  </main>
+</body>
+</html>
