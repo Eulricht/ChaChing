@@ -3,6 +3,7 @@ const promptElement = document.getElementById("reaction-prompt");
 const instructionElement = document.getElementById("reaction-instruction");
 const historyElement = document.getElementById("reaction-history");
 const clearButton = document.getElementById("clear-results");
+const inputHint = document.getElementById("reaction-input-hint");
 
 // Timing controls: increase this range to make the signal less predictable.
 const WAIT_MIN_MS = 1400;
@@ -19,7 +20,13 @@ let falseStarts = 0;
 function setStageState(nextState, prompt, instruction) {
   state = nextState;
   stage.className = `reaction-stage is-${nextState}`;
-  promptElement.textContent = prompt;
+  if (nextState === "idle") {
+    const hint = inputHint.cloneNode(true);
+    hint.removeAttribute("id");
+    promptElement.replaceChildren(hint);
+  } else {
+    promptElement.textContent = prompt;
+  }
   instructionElement.textContent = instruction;
 }
 
@@ -31,14 +38,6 @@ function startAttempt() {
     readyAt = performance.now();
     setStageState("ready", "Click now", "Go.");
   }, delay);
-}
-
-// These labels are descriptive only; they do not represent a clinical benchmark.
-function resultLabel(milliseconds) {
-  if (milliseconds < 180) return "Exceptional response.";
-  if (milliseconds < 220) return "Very fast response.";
-  if (milliseconds < 280) return "Solid response.";
-  return "Keep warming up.";
 }
 
 function renderHistory() {
@@ -138,7 +137,7 @@ function renderStats() {
 function finishAttempt() {
   const elapsed = Math.max(1, Math.round(performance.now() - readyAt));
   results.push(elapsed);
-  setStageState("result", `${elapsed} ms`, `${resultLabel(elapsed)} Click to try again.`);
+  setStageState("result", `${elapsed} ms`, "Click or press Space to try again.");
   renderStats();
 }
 
@@ -178,7 +177,7 @@ clearButton.addEventListener("click", () => {
   window.clearTimeout(signalTimer);
   results = [];
   falseStarts = 0;
-  setStageState("idle", "Click or press Space", "Wait for the screen to turn purple, then react.");
+  setStageState("idle", "", "Wait for the screen to turn purple, then react.");
   renderStats();
 });
 
@@ -188,6 +187,7 @@ document.addEventListener("visibilitychange", () => {
   setStageState("idle", "Test paused", "Return focus, then click to begin again.");
 });
 
+setStageState("idle", "", "Wait for the screen to turn purple, then react.");
 renderStats();
 // Own keyboard focus immediately when opened directly or inside the site shell.
 requestAnimationFrame(() => stage.focus({ preventScroll: true }));

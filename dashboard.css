@@ -39,11 +39,15 @@
 .brand-mark { width: 56px; height: 56px; }
 .brand-lockup h1 { margin: 0; font: 500 clamp(34px, 5vw, 48px)/1 Consolas, monospace; letter-spacing: -.055em; }
 .brand-lockup h1 span { color: var(--hub-accent); }
-.brand-signal { position: relative; width: 33px; height: 24px; margin-left: 1px; }
-.brand-signal::before, .brand-signal::after { content: ""; position: absolute; left: 1px; width: 18px; height: 2px; border-radius: 2px; background: var(--hub-accent); transform-origin: left center; }
-.brand-signal::before { top: 5px; transform: rotate(32deg); }
-.brand-signal::after { bottom: 5px; transform: rotate(-32deg); }
-.brand-signal i { position: absolute; right: 0; bottom: 3px; width: 7px; height: 7px; border: 1px solid var(--hub-accent); transform: rotate(45deg); }
+.brand-knife { flex-shrink: 0; width: 76px; height: 54px; margin-left: -5px; overflow: visible; }
+.knife-driver { fill: none; stroke: var(--hub-accent); stroke-width: 1.5; stroke-linejoin: round; transform-origin: 45px 41px; transform: rotate(-75deg); animation: knife-driver-open 1250ms cubic-bezier(.22, .7, .25, 1) both; }
+.knife-tool { fill: none; stroke: var(--hub-accent); stroke-width: 2; stroke-linejoin: round; transform-origin: 45px 41px; transform: rotate(-150deg); animation: knife-open 1100ms cubic-bezier(.22, .7, .25, 1) both; }
+.knife-handle { fill: var(--hub-accent); }
+.knife-pivot { fill: var(--hub-bg); }
+.knife-detail { stroke: var(--hub-bg); stroke-width: 1.5; stroke-linecap: round; }
+/* Opening duration above controls the pocket-knife flourish on page load. */
+@keyframes knife-open { from { transform: rotate(0deg); } to { transform: rotate(-150deg); } }
+@keyframes knife-driver-open { from { transform: rotate(0deg); } to { transform: rotate(-75deg); } }
 .dashboard-header { margin-bottom: 48px; }
 .hub-eyebrow { color: var(--hub-accent); font-size: 11px; letter-spacing: .14em; text-transform: uppercase; }
 .dashboard-header h1 { margin: 16px 0 12px; font-size: clamp(30px, 5vw, 44px); line-height: 1.15; letter-spacing: -.04em; font-weight: 600; }
@@ -106,7 +110,9 @@ body.project-open { overflow: hidden; }
   .site-nav { min-height: 68px; padding: 10px 20px; }
   #dashboard-view { padding-top: 68px; }
   .dashboard { width: calc(100% - 40px); padding-top: 28px; }
-  .brand-lockup { margin-bottom: 36px; }
+  .brand-lockup { margin-bottom: 36px; gap: 10px; }
+  .brand-lockup h1 { font-size: clamp(26px, 7vw, 34px); }
+  .brand-knife { width: 48px; height: 42px; }
   .brand-mark { width: 48px; height: 48px; }
   .project-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px; }
   .project-card { min-height: 260px; padding: 20px; }
@@ -117,4 +123,5 @@ body.project-open { overflow: hidden; }
 }
 @media (prefers-reduced-motion: reduce) {
   .project-card, .app-view { transition: none; }
+  .knife-tool, .knife-driver { animation: none; }
 }

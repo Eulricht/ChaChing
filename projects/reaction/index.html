@@ -4,12 +4,12 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Swiss.exe</title>
-  <link rel="icon" href="../../assets/swiss-mark.svg?v=2" type="image/svg+xml">
+  <link rel="icon" href="../../assets/swiss-mark.svg?v=3" type="image/svg+xml">
   <link rel="stylesheet" href="../../dashboard.css?v=20261001-2">
   <link rel="stylesheet" href="../../theme.css?v=20261001-1">
-  <link rel="stylesheet" href="reaction.css?v=20261001-2">
+  <link rel="stylesheet" href="reaction.css?v=20261001-3">
   <script src="../../project-host.js?v=20261001-1" defer></script>
-  <script src="reaction.js?v=20261001-3" defer></script>
+  <script src="reaction.js?v=20261001-4" defer></script>
 </head>
 <body class="project-page reaction-page">
   <nav class="site-nav" aria-label="Main navigation">
@@ -26,19 +26,19 @@
     <section class="reaction-test" aria-labelledby="reaction-heading">
       <header class="reaction-heading">
         <h1 id="reaction-heading">Reaction Time</h1>
-        <span class="keyboard-hint">
-          <span class="mouse-hint">
-            <svg viewBox="0 0 16 22" aria-hidden="true"><rect x="1" y="1" width="14" height="20" rx="7"></rect><path d="M8 1v7M1.5 9h6.5"></path></svg>
-            Left click
+        <span class="keyboard-hint" id="reaction-input-hint">
+          <span class="mouse-hint" role="img" aria-label="Left click">
+            <svg viewBox="0 0 16 22" aria-hidden="true"><path class="mouse-left-button" d="M8 1a7 7 0 0 0-7 7v2h7Z"></path><rect x="1" y="1" width="14" height="20" rx="7"></rect><path d="M8 1v9M1 10h14"></path></svg>
           </span>
           <span>or</span>
           <kbd>Space</kbd>
+          <span>to react</span>
         </span>
       </header>
 
       <div class="reaction-stage" id="reaction-stage" role="button" tabindex="0" aria-describedby="reaction-instruction">
         <div class="signal-mark" aria-hidden="true"><span></span></div>
-        <strong class="reaction-prompt" id="reaction-prompt">Click or press Space</strong>
+        <strong class="reaction-prompt" id="reaction-prompt"></strong>
         <p id="reaction-instruction">Wait for the screen to turn purple, then react.</p>
       </div>
 

@@ -13,7 +13,10 @@
 .keyboard-hint, .mouse-hint { display: inline-flex; align-items: center; gap: 8px; }
 .keyboard-hint { color: #77717e; font-size: 12px; }
 .mouse-hint svg { width: 13px; height: 18px; fill: none; stroke: var(--hub-muted); stroke-width: 1.3; stroke-linecap: round; }
+.mouse-hint .mouse-left-button { fill: var(--hub-accent); stroke: none; }
 .keyboard-hint kbd { padding: 6px 9px; border: 1px solid var(--hub-line); border-radius: 6px; color: var(--hub-muted); background: var(--hub-surface); font: inherit; }
+.reaction-prompt .keyboard-hint { display: inline-flex; flex-wrap: wrap; justify-content: center; gap: 12px; color: var(--hub-text); font-size: clamp(16px, 3vw, 22px); letter-spacing: 0; font-weight: 400; }
+.reaction-prompt .mouse-hint svg { width: 21px; height: 29px; }
 
 .reaction-stage {
   position: relative;
