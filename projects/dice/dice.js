@@ -2,26 +2,41 @@ const row = document.getElementById('dice-row');
 const rollButton = document.getElementById('roll');
 const countButtons = [...document.querySelectorAll('[data-count]')];
 const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)');
-// Adjust tumble duration and retained history here.
-const ROLL_DURATION_MS = 1050;
+// All dice share one clock: no staggered finish or cooldown after landing.
+const ROLL_DURATION_MS = 640;
 const HISTORY_LIMIT = 8;
+const SVG_NS = 'http://www.w3.org/2000/svg';
 const pipPositions = [[5], [1, 9], [1, 5, 9], [1, 3, 7, 9], [1, 3, 5, 7, 9], [1, 3, 4, 6, 7, 9]];
-const faceAngles = [[0, 0], [0, -90], [-90, 0], [90, 0], [0, 90], [0, 180]];
 let diceCount = 1;
 let rolling = false;
+let queuedRoll = false;
 let rolls = 0;
 let history = [];
 let dice = [];
 
 function randomFace() {
-  // Reject the four excess byte values so all six outcomes are equally likely.
+  // Reject excess byte values so all six outcomes have equal probability.
   const byte = new Uint8Array(1);
   do { crypto.getRandomValues(byte); } while (byte[0] >= 252);
   return byte[0] % 6 + 1;
 }
 
-function orientation(x, y) {
-  return `rotateX(-12deg) rotateY(-18deg) rotateX(${x}deg) rotateY(${y}deg)`;
+function svgElement(name, attributes) {
+  const element = document.createElementNS(SVG_NS, name);
+  Object.entries(attributes).forEach(([key, value]) => element.setAttribute(key, value));
+  return element;
+}
+
+function makePips(value) {
+  const group = svgElement('g', { class: 'die-pips' });
+  pipPositions[value - 1].forEach(position => {
+    group.append(svgElement('circle', {
+      cx: 43 + ((position - 1) % 3) * 37,
+      cy: 39 + Math.floor((position - 1) / 3) * 37,
+      r: 8
+    }));
+  });
+  return group;
 }
 
 function buildDice() {
@@ -30,51 +45,24 @@ function buildDice() {
     const space = document.createElement('div');
     space.className = 'die-space';
     space.setAttribute('role', 'img');
-    space.setAttribute('aria-label', `Die ${index + 1}: ready to roll`);
-    const cube = document.createElement('div');
-    cube.className = 'die';
-    pipPositions.forEach(positions => {
-      const face = document.createElement('div');
-      face.className = 'die-face';
-      positions.forEach(position => {
-        const pip = document.createElement('span');
-        pip.className = 'pip';
-        pip.style.gridRow = Math.ceil(position / 3);
-        pip.style.gridColumn = (position - 1) % 3 + 1;
-        face.append(pip);
-      });
-      cube.append(face);
-    });
-    cube.style.transform = orientation(0, 0);
-    space.append(cube);
+    space.setAttribute('aria-label', 'Die ' + (index + 1) + ': ready to roll');
+    const shadow = document.createElement('span');
+    shadow.className = 'die-shadow';
+    const body = svgElement('svg', { class: 'die', viewBox: '0 0 160 168', 'aria-hidden': 'true' });
+    body.append(
+      svgElement('rect', { class: 'die-edge', x: 8, y: 17, width: 144, height: 143, rx: 25 }),
+      svgElement('rect', { class: 'die-surface', x: 8, y: 7, width: 144, height: 143, rx: 25 }),
+      svgElement('rect', { class: 'die-rim', x: 12, y: 11, width: 136, height: 135, rx: 22 })
+    );
+    const pips = makePips(1);
+    body.append(pips);
+    space.append(shadow, body);
     row.append(space);
-    return { cube, space, x: 0, y: 0 };
+    return { body, space, shadow, pips };
   });
 }
 
-async function roll() {
-  if (rolling) return;
-  rolling = true;
-  rollButton.disabled = true;
-  countButtons.forEach(button => { button.disabled = true; });
-  row.classList.add('is-rolling');
-  const values = dice.map(randomFace);
-  await Promise.all(dice.map(async (die, index) => {
-    const [x, y] = faceAngles[values[index] - 1];
-    if (!reducedMotion.matches) {
-      const animation = die.cube.animate([
-        { transform: orientation(die.x, die.y), offset: 0 },
-        { transform: `translateY(-32px) ${orientation(x + 240, y + 300)}`, offset: .38 },
-        { transform: `translateY(-5px) ${orientation(x + 345, y + 355)}`, offset: .83 },
-        { transform: orientation(x + 360, y + 360), offset: 1 }
-      ], { duration: ROLL_DURATION_MS + index * 100, easing: 'cubic-bezier(.2,.65,.3,1)' });
-      await animation.finished;
-    }
-    die.cube.style.transform = orientation(x, y);
-    die.x = x;
-    die.y = y;
-    die.space.setAttribute('aria-label', `Die ${index + 1}: ${values[index]}`);
-  }));
+function recordRoll(values) {
   const total = values.reduce((sum, value) => sum + value, 0);
   rolls += 1;
   history.unshift({ values, total });
@@ -82,16 +70,71 @@ async function roll() {
   document.getElementById('roll-total').textContent = total;
   document.getElementById('roll-values').textContent = values.join(' + ');
   document.getElementById('roll-count').textContent = rolls;
-  const historyList = document.getElementById('roll-history');
-  historyList.replaceChildren(...history.map(result => {
+  document.getElementById('roll-history').replaceChildren(...history.map(result => {
     const item = document.createElement('li');
-    item.textContent = result.values.length > 1 ? `${result.values.join(' + ')} = ${result.total}` : String(result.total);
+    item.textContent = result.values.length > 1 ? result.values.join(' + ') + ' = ' + result.total : String(result.total);
     return item;
   }));
-  row.classList.remove('is-rolling');
-  rolling = false;
-  rollButton.disabled = false;
-  countButtons.forEach(button => { button.disabled = false; });
+}
+
+function roll() {
+  if (rolling) {
+    // Buffer one deliberate press, rather than silently dropping input near landing.
+    queuedRoll = true;
+    return;
+  }
+  rolling = true;
+  rollButton.setAttribute('aria-busy', 'true');
+  countButtons.forEach(button => { button.disabled = true; });
+  const values = dice.map(randomFace);
+  dice.forEach((die, index) => {
+    die.nextPips = makePips(values[index]);
+    die.nextPips.style.opacity = '0';
+    die.body.append(die.nextPips);
+  });
+  const startedAt = performance.now();
+
+  function finish() {
+    dice.forEach((die, index) => {
+      die.pips.remove();
+      die.pips = die.nextPips;
+      die.pips.style.opacity = '1';
+      die.body.style.transform = '';
+      die.shadow.style.opacity = '';
+      die.shadow.style.transform = '';
+      die.space.setAttribute('aria-label', 'Die ' + (index + 1) + ': ' + values[index]);
+    });
+    recordRoll(values);
+    rolling = false;
+    rollButton.removeAttribute('aria-busy');
+    countButtons.forEach(button => { button.disabled = false; });
+    if (queuedRoll) {
+      queuedRoll = false;
+      roll();
+    }
+  }
+
+  function frame(now) {
+    const t = Math.min(1, (now - startedAt) / ROLL_DURATION_MS);
+    if (t >= 1 || reducedMotion.matches) { finish(); return; }
+    // Smooth start and landing; one transform avoids competing CSS/JS animations.
+    const progress = t - Math.sin(t * Math.PI * 2) / (Math.PI * 2);
+    const lift = Math.pow(Math.sin(Math.PI * t), 2);
+    const blend = Math.max(0, Math.min(1, (t - .28) / .32));
+    dice.forEach((die, index) => {
+      const direction = index % 2 ? -1 : 1;
+      const angle = direction * 360 * progress;
+      const drift = direction * 10 * Math.sin(Math.PI * 2 * t) * lift;
+      die.body.style.transform = 'translate(' + drift + 'px,' + (-48 * lift) + 'px) rotate(' + angle + 'deg)';
+      die.pips.style.opacity = String(1 - blend);
+      die.nextPips.style.opacity = String(blend);
+      die.shadow.style.opacity = String(1 - lift * .5);
+      die.shadow.style.transform = 'scale(' + (1 - lift * .22) + ')';
+    });
+    requestAnimationFrame(frame);
+  }
+  if (reducedMotion.matches) finish();
+  else requestAnimationFrame(frame);
 }
 
 countButtons.forEach(button => button.addEventListener('click', () => {
@@ -99,12 +142,18 @@ countButtons.forEach(button => button.addEventListener('click', () => {
   diceCount = Number(button.dataset.count);
   countButtons.forEach(option => option.setAttribute('aria-pressed', String(option === button)));
   buildDice();
+  rollButton.focus({ preventScroll: true });
 }));
 rollButton.addEventListener('click', roll);
 document.addEventListener('dice-roll', roll);
+// Capture Space even when a count button has keyboard focus; prevent native activation.
 document.addEventListener('keydown', event => {
-  if (event.key !== ' ' || event.target.closest('button, a')) return;
+  if (event.code !== 'Space' && event.key !== ' ') return;
   event.preventDefault();
+  event.stopPropagation();
   if (!event.repeat) roll();
-});
+}, true);
+document.addEventListener('keyup', event => {
+  if (event.code === 'Space' || event.key === ' ') event.preventDefault();
+}, true);
 buildDice();

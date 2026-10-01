@@ -1,52 +1,47 @@
-.dice-main { width: min(100% - 48px, 960px); margin: 72px auto 50px; }
-.dice-controls { display: flex; align-items: center; justify-content: center; gap: 20px; }
-.dice-label { color: var(--hub-muted); font-size: 12px; }
-.dice-count { display: flex; gap: 5px; }
-.dice-count button { width: 40px; height: 36px; border: 1px solid transparent; border-radius: 8px; background: transparent; color: var(--hub-muted); font: inherit; transition: background 160ms ease, color 160ms ease; }
+.dice-main { width: min(100% - 64px, 1240px); margin: 46px auto 36px; display: flex; flex-direction: column; min-height: calc(100svh - 162px); }
+.dice-controls { display: flex; align-items: center; justify-content: center; gap: 22px; }
+.dice-label { color: var(--hub-muted); font-size: 13px; }
+.dice-count { display: flex; gap: 7px; }
+.dice-count button { width: 46px; height: 40px; border: 1px solid transparent; border-radius: 9px; background: transparent; color: var(--hub-muted); font: 16px Consolas, monospace; transition: background 160ms ease, color 160ms ease; }
 .dice-count button:hover { background: var(--hub-hover); color: var(--hub-text); }
 .dice-count button[aria-pressed="true"] { color: var(--hub-accent-strong); background: #241d2e; border-color: #40324f; }
-/* Dice size controls the cube, face depth, and spacing together. */
-.dice-table { --die-size: 112px; position: relative; min-height: 330px; display: grid; place-items: center; }
-.dice-row { position: relative; display: flex; justify-content: center; gap: 70px; z-index: 1; }
-.die-space { position: relative; width: var(--die-size); height: var(--die-size); perspective: 800px; }
-.die-space::after { content: ""; position: absolute; left: 0; right: 0; bottom: -42px; height: 24px; background: #0007; border-radius: 50%; filter: blur(12px); transform: scaleX(.85); transition: opacity 200ms ease; }
-.is-rolling .die-space::after { opacity: .35; }
-.die { width: 100%; height: 100%; position: relative; transform-style: preserve-3d; }
-.die-face { position: absolute; inset: 0; display: grid; grid-template-columns: repeat(3, 1fr); grid-template-rows: repeat(3, 1fr); padding: 19%; gap: 10%; border: 1px solid #645373; border-radius: 18px; backface-visibility: hidden; background: linear-gradient(145deg, #38303f, #201c28); box-shadow: inset 0 1px 2px #ffffff12, inset 0 -2px 6px #0005; }
-.die-face:nth-child(1) { transform: translateZ(calc(var(--die-size) / 2)); }
-.die-face:nth-child(2) { transform: rotateY(90deg) translateZ(calc(var(--die-size) / 2)); }
-.die-face:nth-child(3) { transform: rotateX(90deg) translateZ(calc(var(--die-size) / 2)); }
-.die-face:nth-child(4) { transform: rotateX(-90deg) translateZ(calc(var(--die-size) / 2)); }
-.die-face:nth-child(5) { transform: rotateY(-90deg) translateZ(calc(var(--die-size) / 2)); }
-.die-face:nth-child(6) { transform: rotateY(180deg) translateZ(calc(var(--die-size) / 2)); }
-.pip { border-radius: 50%; background: var(--hub-accent-strong); box-shadow: inset 0 1px 2px #ffffff25, 0 1px 3px #0007; }
-.table-orbit { position: absolute; width: min(90%, 620px); height: 120px; bottom: 28px; border: 1px solid #26222e; border-radius: 50%; background: radial-gradient(ellipse, #251c302c, transparent 65%); }
-.roll-controls { display: grid; justify-items: center; gap: 16px; }
-.roll-button { display: flex; align-items: center; gap: 11px; border: 1px solid #4a375e; border-radius: 10px; padding: 14px 25px; color: var(--hub-accent-strong); background: #241c2e; font: 14px Consolas, monospace; transition: background 180ms ease, border-color 180ms ease; }
+/* One size scales the complete die; its vector silhouette stays sealed during motion. */
+.dice-table { --die-size: clamp(150px, 16vw, 206px); position: relative; min-height: clamp(300px, 43vh, 460px); display: grid; place-items: center; }
+.dice-row { display: flex; justify-content: center; gap: clamp(28px, 5vw, 80px); width: 100%; }
+.die-space { position: relative; width: var(--die-size); height: var(--die-size); flex-shrink: 0; }
+.die { display: block; width: 100%; height: 100%; overflow: visible; position: relative; z-index: 1; }
+.die-edge { fill: #1b1722; stroke: #53445f; stroke-width: 1.2; }
+.die-surface { fill: #25212d; stroke: #7f688f; stroke-width: 1.2; }
+.die-rim { fill: none; stroke: #ffffff08; stroke-width: 1; }
+.die-pips { fill: var(--hub-accent-strong); }
+.die-shadow { position: absolute; left: 12%; right: 12%; height: 16px; bottom: -22px; background: #0005; border-radius: 50%; filter: blur(9px); }
+.roll-controls { display: grid; justify-items: center; gap: 20px; }
+.roll-button { display: flex; align-items: center; gap: 12px; border: 1px solid #4a375e; border-radius: 11px; padding: 16px 32px; color: var(--hub-accent-strong); background: #241c2e; font: 16px Consolas, monospace; transition: background 180ms ease, border-color 180ms ease; }
 .roll-button:hover { background: #30243d; border-color: var(--hub-accent); }
-.roll-button svg { width: 19px; height: 19px; fill: none; stroke: currentColor; stroke-width: 1.6; stroke-linecap: round; stroke-linejoin: round; }
-.roll-button:disabled { opacity: .65; }
-.roll-hint { color: #77717e; font-size: 11px; }
-.roll-hint kbd { font: inherit; color: var(--hub-muted); }
-.dice-stats { display: flex; justify-content: center; gap: 85px; margin: 44px 0 40px; }
-.dice-stats div { display: grid; gap: 10px; min-width: 70px; }
-.dice-stats span { color: var(--hub-muted); font-size: 12px; }
-.dice-stats strong { font-size: 30px; font-weight: 400; }
+.roll-button svg { width: 22px; height: 22px; fill: none; stroke: currentColor; stroke-width: 1.6; stroke-linecap: round; stroke-linejoin: round; }
+.roll-hint { display: flex; align-items: center; gap: 9px; color: #77717e; font-size: 12px; }
+.roll-hint kbd { display: inline-block; padding: 6px 11px; border: 1px solid #403847; border-bottom-width: 3px; border-radius: 6px; background: var(--hub-surface); font: inherit; color: var(--hub-text); }
+/* Flexible space anchors results near the bottom of tall screens. */
+.dice-results { margin-top: auto; padding-top: clamp(90px, 14vh, 180px); }
+.dice-stats { display: flex; justify-content: center; gap: clamp(40px, 9vw, 140px); margin: 0 0 30px; }
+.dice-stats div { display: grid; gap: 12px; min-width: 80px; }
+.dice-stats span { color: var(--hub-muted); font-size: 13px; }
+.dice-stats strong { font-size: 36px; font-weight: 400; }
 #roll-total { color: var(--hub-accent-strong); }
-#roll-values { font-size: 24px; }
+#roll-values { font-size: 28px; }
 .dice-history { text-align: center; }
-.dice-history ol { display: flex; flex-wrap: wrap; justify-content: center; gap: 10px; list-style: none; margin: 18px 0 0; padding: 0; }
+.dice-history ol { display: flex; flex-wrap: wrap; justify-content: center; gap: 10px; list-style: none; min-height: 34px; margin: 16px 0 0; padding: 0; }
 .dice-history li { color: var(--hub-muted); font-size: 12px; padding: 9px 14px; border-radius: 7px; background: var(--hub-surface); }
 .dice-history li:first-child:not(.history-empty) { color: var(--hub-accent-strong); }
 .dice-history .history-empty { color: #68626e; background: none; }
 @media (max-width: 600px) {
-  .dice-main { margin-top: 45px; }
-  .dice-table { --die-size: 72px; min-height: 270px; }
-  .dice-row { gap: 32px; }
-  .die-face { border-radius: 12px; }
-  .dice-stats { gap: 30px; }
-  .dice-stats strong { font-size: 26px; }
-  #roll-values { font-size: 20px; }
+  .dice-main { width: calc(100% - 32px); margin-top: 35px; min-height: calc(100svh - 139px); }
+  .dice-table { --die-size: clamp(84px, 25vw, 138px); min-height: 310px; }
+  .dice-row { gap: 14px; }
+  .dice-stats { gap: 26px; }
+  .dice-stats div { min-width: 65px; }
+  .dice-stats strong { font-size: 28px; }
+  #roll-values { font-size: 22px; }
+  .dice-results { padding-top: 100px; }
 }
-@media (max-width: 360px) { .dice-table { --die-size: 62px; } .dice-row { gap: 26px; } }
-@media (prefers-reduced-motion: reduce) { .dice-count button, .roll-button, .die-space::after { transition: none; } }
+@media (prefers-reduced-motion: reduce) { .dice-count button, .roll-button { transition: none; } }

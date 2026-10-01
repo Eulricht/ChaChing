@@ -7,9 +7,9 @@
   <link rel="icon" href="../../assets/swiss-mark.svg?v=3" type="image/svg+xml">
   <link rel="stylesheet" href="../../dashboard.css?v=20261001-4">
   <link rel="stylesheet" href="../../theme.css?v=20261001-2">
-  <link rel="stylesheet" href="dice.css?v=1">
+  <link rel="stylesheet" href="dice.css?v=2">
   <script src="../../project-host.js" defer></script>
-  <script src="dice.js?v=1" defer></script>
+  <script src="dice.js?v=2" defer></script>
 </head>
 <body class="project-page dice-page">
   <nav class="site-nav" aria-label="Main navigation">
@@ -28,12 +28,12 @@
     </header>
     <section class="dice-table" aria-label="Dice tray">
       <div class="dice-row" id="dice-row"></div>
-      <div class="table-orbit" aria-hidden="true"></div>
     </section>
     <div class="roll-controls">
       <button class="roll-button" id="roll" type="button"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M20 7v5h-5M4 17v-5h5M19.5 11a7.5 7.5 0 0 0-13-4M4.5 13a7.5 7.5 0 0 0 13 4"/></svg><span>Roll dice</span></button>
       <span class="roll-hint"><kbd>Space</kbd> to roll</span>
     </div>
+    <div class="dice-results">
     <section class="dice-stats" aria-label="Roll statistics" aria-live="polite">
       <div><span>Total</span><strong id="roll-total">0</strong></div>
       <div><span>Rolled</span><strong id="roll-values">--</strong></div>
@@ -43,6 +43,7 @@
       <span class="dice-label">Recent rolls</span>
       <ol id="roll-history"><li class="history-empty">Your next roll starts here.</li></ol>
     </section>
+    </div>
   </main>
 </body>
 </html>
