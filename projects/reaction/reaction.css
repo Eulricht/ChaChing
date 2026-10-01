@@ -5,12 +5,14 @@
 }
 
 .reaction-test { display: grid; gap: 28px; }
-.reaction-heading { display: flex; align-items: end; justify-content: space-between; gap: 24px; }
+.reaction-heading { display: flex; align-items: center; justify-content: space-between; gap: 24px; }
 .section-label { color: var(--hub-muted); font-size: 11px; letter-spacing: .09em; text-transform: uppercase; }
 .reaction-heading h1, .history-heading h2 { margin: 7px 0 0; color: var(--hub-text); font-family: "Segoe UI Variable Display", "Segoe UI", sans-serif; font-weight: 560; letter-spacing: -.035em; }
-.reaction-heading h1 { font-size: clamp(27px, 4vw, 38px); }
+.reaction-heading h1 { margin: 0; font-size: clamp(27px, 4vw, 38px); }
 .history-heading h2 { font-size: 19px; }
+.keyboard-hint, .mouse-hint { display: inline-flex; align-items: center; gap: 8px; }
 .keyboard-hint { color: #77717e; font-size: 12px; }
+.mouse-hint svg { width: 13px; height: 18px; fill: none; stroke: var(--hub-muted); stroke-width: 1.3; stroke-linecap: round; }
 .keyboard-hint kbd { padding: 6px 9px; border: 1px solid var(--hub-line); border-radius: 6px; color: var(--hub-muted); background: var(--hub-surface); font: inherit; }
 
 .reaction-stage {
@@ -53,7 +55,7 @@
 .reaction-stage.is-result { border-color: #5b496d; }
 
 /* Metric columns can be added or removed without changing the game logic. */
-.reaction-stats { display: grid; grid-template-columns: repeat(6, minmax(0, 1fr)); gap: 22px; padding: 8px 2px; }
+.reaction-stats { display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); gap: 22px; padding: 8px 2px; }
 .reaction-metric { display: grid; grid-template-columns: auto auto 1fr; align-items: baseline; gap: 4px; min-width: 0; }
 .reaction-metric span { grid-column: 1 / -1; margin-bottom: 4px; color: var(--hub-muted); font-size: 11px; }
 .reaction-metric strong { color: var(--hub-text); font-size: 27px; font-weight: 400; }
@@ -64,15 +66,18 @@
 .history-heading { display: flex; align-items: end; justify-content: space-between; gap: 20px; }
 .clear-results { min-height: 38px; padding: 8px 10px; border: 1px solid transparent; border-radius: 7px; color: #77717e; background: transparent; font: 12px Consolas, monospace; }
 .clear-results:hover { color: var(--hub-text); border-color: var(--hub-line); background: var(--hub-surface); }
-.reaction-history { display: flex; align-items: end; gap: 12px; min-height: 154px; margin-top: 22px; padding: 0 4px; }
+.reaction-history { display: grid; min-height: 190px; margin-top: 18px; }
 .empty-history { align-self: center; margin: auto; color: #625d67; font-size: 12px; }
-.history-item { display: grid; grid-template-rows: 1fr auto; align-items: end; justify-items: center; gap: 8px; flex: 1; height: 140px; min-width: 0; }
-.history-bar { width: min(100%, 42px); min-height: 22px; border-radius: 6px 6px 2px 2px; background: #4b3a5d; transform-origin: bottom; animation: bar-enter 260ms ease both; }
-.history-item:last-child .history-bar { background: var(--hub-accent); }
-.history-value { color: #77717e; font-size: 10px; white-space: nowrap; }
+.history-chart { display: block; width: 100%; height: 190px; overflow: visible; }
+.history-grid { stroke: #2c2931; stroke-width: 1; }
+.history-axis-label { fill: #6f6975; font: 10px Consolas, monospace; }
+.history-average { stroke: #6b596f; stroke-width: 1; stroke-dasharray: 5 6; }
+.history-line { fill: none; stroke: #8e6daf; stroke-width: 2.25; stroke-linecap: round; stroke-linejoin: round; animation: trend-enter 360ms ease both; }
+.history-dot { fill: var(--hub-bg); stroke: #9a7abb; stroke-width: 2.5; }
+.history-dot.is-latest { fill: var(--hub-accent); stroke: var(--hub-accent); }
 
 @keyframes wait-pulse { 50% { opacity: .45; transform: scale(.94); } }
-@keyframes bar-enter { from { opacity: 0; transform: scaleY(.2); } }
+@keyframes trend-enter { from { opacity: 0; } }
 
 @media (max-width: 760px) {
   .reaction-main { width: calc(100% - 40px); margin-top: 34px; }
@@ -84,10 +89,9 @@
 
 @media (max-width: 430px) {
   .reaction-stats { grid-template-columns: repeat(2, minmax(0, 1fr)); }
-  .reaction-history { gap: 7px; }
-  .history-value { font-size: 9px; }
+  .history-chart { height: 170px; }
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .reaction-stage, .signal-mark, .history-bar { animation: none; transition: none; }
+  .reaction-stage, .signal-mark, .history-line { animation: none; transition: none; }
 }

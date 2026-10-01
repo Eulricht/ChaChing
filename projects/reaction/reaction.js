@@ -8,6 +8,7 @@ const clearButton = document.getElementById("clear-results");
 const WAIT_MIN_MS = 1400;
 const WAIT_MAX_MS = 4200;
 const HISTORY_LIMIT = 8;
+const SVG_NS = "http://www.w3.org/2000/svg";
 
 let state = "idle";
 let readyAt = 0;
@@ -32,12 +33,6 @@ function startAttempt() {
   }, delay);
 }
 
-function median(values) {
-  const sorted = [...values].sort((a, b) => a - b);
-  const middle = Math.floor(sorted.length / 2);
-  return sorted.length % 2 ? sorted[middle] : Math.round((sorted[middle - 1] + sorted[middle]) / 2);
-}
-
 // These labels are descriptive only; they do not represent a clinical benchmark.
 function resultLabel(milliseconds) {
   if (milliseconds < 180) return "Exceptional response.";
@@ -59,20 +54,73 @@ function renderHistory() {
     return;
   }
 
-  recent.forEach(value => {
-    const item = document.createElement("div");
-    item.className = "history-item";
-    const bar = document.createElement("span");
-    bar.className = "history-bar";
-    // Faster results render taller; 120-500ms defines the visible chart range.
-    const normalized = 1 - (Math.min(500, Math.max(120, value)) - 120) / 380;
-    bar.style.height = `${28 + normalized * 82}%`;
-    const label = document.createElement("span");
-    label.className = "history-value";
-    label.textContent = `${value}ms`;
-    item.append(bar, label);
-    historyElement.append(item);
+  const width = 800;
+  const height = 190;
+  const plot = { left: 54, right: 24, top: 20, bottom: 34 };
+  const minimum = Math.min(...recent);
+  const maximum = Math.max(...recent);
+  // Round the adaptive scale so the chart stays readable as results change.
+  const minY = Math.max(50, Math.floor((minimum - 40) / 50) * 50);
+  const maxY = Math.max(minY + 100, Math.ceil((maximum + 40) / 50) * 50);
+  const plotWidth = width - plot.left - plot.right;
+  const plotHeight = height - plot.top - plot.bottom;
+  const xFor = index => recent.length === 1
+    ? plot.left + plotWidth / 2
+    : plot.left + (index / (recent.length - 1)) * plotWidth;
+  const yFor = value => plot.top + ((maxY - value) / (maxY - minY)) * plotHeight;
+  const makeSvgElement = (name, attributes = {}) => {
+    const element = document.createElementNS(SVG_NS, name);
+    Object.entries(attributes).forEach(([key, value]) => element.setAttribute(key, value));
+    return element;
+  };
+
+  const chart = makeSvgElement("svg", {
+    class: "history-chart",
+    viewBox: `0 0 ${width} ${height}`,
+    role: "img",
+    "aria-label": `Reaction time trend: ${recent.join(", ")} milliseconds`
   });
+
+  [maxY, Math.round((maxY + minY) / 2), minY].forEach(value => {
+    const y = yFor(value);
+    chart.append(makeSvgElement("line", { class: "history-grid", x1: plot.left, y1: y, x2: width - plot.right, y2: y }));
+    const label = makeSvgElement("text", { class: "history-axis-label", x: plot.left - 10, y: y + 4, "text-anchor": "end" });
+    label.textContent = value;
+    chart.append(label);
+  });
+
+  const average = recent.reduce((sum, value) => sum + value, 0) / recent.length;
+  chart.append(makeSvgElement("line", {
+    class: "history-average",
+    x1: plot.left,
+    y1: yFor(average),
+    x2: width - plot.right,
+    y2: yFor(average)
+  }));
+
+  const points = recent.map((value, index) => `${xFor(index)},${yFor(value)}`).join(" ");
+  if (recent.length > 1) chart.append(makeSvgElement("polyline", { class: "history-line", points }));
+
+  recent.forEach((value, index) => {
+    const x = xFor(index);
+    const y = yFor(value);
+    const dot = makeSvgElement("circle", {
+      class: `history-dot${index === recent.length - 1 ? " is-latest" : ""}`,
+      cx: x,
+      cy: y,
+      r: index === recent.length - 1 ? 5 : 4
+    });
+    const title = makeSvgElement("title");
+    title.textContent = `Attempt ${results.length - recent.length + index + 1}: ${value} ms`;
+    dot.append(title);
+    chart.append(dot);
+
+    const attemptLabel = makeSvgElement("text", { class: "history-axis-label", x, y: height - 8, "text-anchor": "middle" });
+    attemptLabel.textContent = String(results.length - recent.length + index + 1);
+    chart.append(attemptLabel);
+  });
+
+  historyElement.append(chart);
   historyElement.setAttribute("aria-label", `Recent reaction times: ${recent.join(", ")} milliseconds`);
 }
 
@@ -82,7 +130,6 @@ function renderStats() {
   document.getElementById("latest-result").textContent = latest ?? "--";
   document.getElementById("best-result").textContent = results.length ? Math.min(...results) : "--";
   document.getElementById("average-result").textContent = average ?? "--";
-  document.getElementById("median-result").textContent = results.length ? median(results) : "--";
   document.getElementById("attempt-count").textContent = String(results.length);
   document.getElementById("false-start-count").textContent = String(falseStarts);
   renderHistory();
@@ -131,7 +178,7 @@ clearButton.addEventListener("click", () => {
   window.clearTimeout(signalTimer);
   results = [];
   falseStarts = 0;
-  setStageState("idle", "Click to begin", "Wait for the screen to turn purple, then react.");
+  setStageState("idle", "Click or press Space", "Wait for the screen to turn purple, then react.");
   renderStats();
 });
 
@@ -142,3 +189,5 @@ document.addEventListener("visibilitychange", () => {
 });
 
 renderStats();
+// Own keyboard focus immediately when opened directly or inside the site shell.
+requestAnimationFrame(() => stage.focus({ preventScroll: true }));

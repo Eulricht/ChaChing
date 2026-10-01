@@ -74,11 +74,24 @@ document.querySelectorAll('[data-project]').forEach(button => {
 shellHome.addEventListener('click', showDashboard);
 
 document.addEventListener('keydown', event => {
-  if (event.key !== 'Tab' || activeProject !== 'typing' || projectView.hidden) return;
-  const restartButton = projectFrame.contentDocument?.getElementById('restart');
-  if (!restartButton) return;
-  event.preventDefault();
-  restartButton.focus({ preventScroll: true });
+  if (projectView.hidden) return;
+
+  if (event.key === 'Tab' && activeProject === 'typing') {
+    const restartButton = projectFrame.contentDocument?.getElementById('restart');
+    if (!restartButton) return;
+    event.preventDefault();
+    restartButton.focus({ preventScroll: true });
+    return;
+  }
+
+  // Forward the first reaction key before the embedded project owns focus.
+  if ((event.key === ' ' || event.key === 'Enter') && activeProject === 'reaction') {
+    const stage = projectFrame.contentDocument?.getElementById('reaction-stage');
+    if (!stage) return;
+    event.preventDefault();
+    stage.focus({ preventScroll: true });
+    stage.dispatchEvent(new KeyboardEvent('keydown', { key: event.key, bubbles: true }));
+  }
 }, true);
 
 window.addEventListener('message', event => {

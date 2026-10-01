@@ -4,12 +4,12 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Swiss.exe</title>
-  <link rel="icon" href="../../assets/swiss-mark.svg" type="image/svg+xml">
-  <link rel="stylesheet" href="../../dashboard.css?v=20261001-1">
+  <link rel="icon" href="../../assets/swiss-mark.svg?v=2" type="image/svg+xml">
+  <link rel="stylesheet" href="../../dashboard.css?v=20261001-2">
   <link rel="stylesheet" href="../../theme.css?v=20261001-1">
-  <link rel="stylesheet" href="reaction.css?v=20261001-1">
+  <link rel="stylesheet" href="reaction.css?v=20261001-2">
   <script src="../../project-host.js?v=20261001-1" defer></script>
-  <script src="reaction.js?v=20261001-2" defer></script>
+  <script src="reaction.js?v=20261001-3" defer></script>
 </head>
 <body class="project-page reaction-page">
   <nav class="site-nav" aria-label="Main navigation">
@@ -25,16 +25,20 @@
   <main class="reaction-main">
     <section class="reaction-test" aria-labelledby="reaction-heading">
       <header class="reaction-heading">
-        <div>
-          <span class="section-label">Response test</span>
-          <h1 id="reaction-heading">Reaction time</h1>
-        </div>
-        <span class="keyboard-hint"><kbd>Space</kbd> to react</span>
+        <h1 id="reaction-heading">Reaction Time</h1>
+        <span class="keyboard-hint">
+          <span class="mouse-hint">
+            <svg viewBox="0 0 16 22" aria-hidden="true"><rect x="1" y="1" width="14" height="20" rx="7"></rect><path d="M8 1v7M1.5 9h6.5"></path></svg>
+            Left click
+          </span>
+          <span>or</span>
+          <kbd>Space</kbd>
+        </span>
       </header>
 
       <div class="reaction-stage" id="reaction-stage" role="button" tabindex="0" aria-describedby="reaction-instruction">
         <div class="signal-mark" aria-hidden="true"><span></span></div>
-        <strong class="reaction-prompt" id="reaction-prompt">Click to begin</strong>
+        <strong class="reaction-prompt" id="reaction-prompt">Click or press Space</strong>
         <p id="reaction-instruction">Wait for the screen to turn purple, then react.</p>
       </div>
 
@@ -42,7 +46,6 @@
         <div class="reaction-metric is-primary"><span>Latest</span><strong id="latest-result">--</strong><small>ms</small></div>
         <div class="reaction-metric"><span>Best</span><strong id="best-result">--</strong><small>ms</small></div>
         <div class="reaction-metric"><span>Average</span><strong id="average-result">--</strong><small>ms</small></div>
-        <div class="reaction-metric"><span>Median</span><strong id="median-result">--</strong><small>ms</small></div>
         <div class="reaction-metric"><span>Attempts</span><strong id="attempt-count">0</strong></div>
         <div class="reaction-metric"><span>False starts</span><strong id="false-start-count">0</strong></div>
       </section>
